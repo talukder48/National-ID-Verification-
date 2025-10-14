@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="bn">
+<head>
+  <meta charset="utf-8">
+  <title>Smart Home Loan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- ===== CSS Dependencies ===== -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <link th:href="@{/css/nikosh.css}" rel="stylesheet">
+  <link th:href="@{/css/style.css}" rel="stylesheet">
+
+  <!-- ===== JS Dependencies ===== -->
+<!-- ===== JS Dependencies ===== -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js" defer></script>
+
+  <style>
+    body {
+      background: #fff;
+      font-family: 'Nikosh', sans-serif;
+    }
+
+    .form-container {
+      background: #fff;
+      border-radius: 10px;
+      padding: 30px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+      max-width: 850px;
+      margin: 0 auto 30px;
+    }
+
+    .section-divider {
+      border-top: 2px solid #2E8B57;
+      width: 85%;
+      margin: 15px auto;
+    }
+
+    .form-control {
+      border-radius: 5px;
+      box-shadow: none;
+      border-color: #ccc;
+      transition: all 0.2s ease-in-out;
+    }
+
+    .form-control:focus {
+      border-color: #2E8B57;
+      box-shadow: 0 0 5px rgba(46, 139, 87, 0.4);
+    }
+
+    .btn-success:hover {
+      background-color: #256c46;
+    }
+
+    .Bangla-font {
+      font-family: 'Nikosh', sans-serif;
+    }
+
+    @media print {
+      #printId, #verifyAgainId { display: none !important; }
+      .form-container { box-shadow: none !important; border: none !important; padding: 0 !important; }
+      .section-divider { width: 90%; }
+    }
+    p{
+		color: black;
+	}
+	
+	
+	
+	footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  font-size: 14px;
+  background: #2E8B57;
+  color: white;
+  text-align: center;
+  padding: 8px 0;
+  border-top: 2px solid #256c46;
+}
+
+	
+	
+	
+  </style>
+</head>
+
+<body>
+	
+	
+<!-- ===== Top Header / Navbar ===== -->
+<nav class="navbar navbar-default navbar-fixed-top-custom" style="background-color:#2E8B57; border:none; border-radius:0;">
+  <div class="container-fluid">
+
+    <!-- Navbar Header -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#mainNavbar">
+        <span class="icon-bar" style="background-color:#fff;"></span>
+        <span class="icon-bar" style="background-color:#fff;"></span>
+        <span class="icon-bar" style="background-color:#fff;"></span>
+      </button>
+
+      <a class="navbar-brand Bangla-font" href="/" style="color:#fff; font-weight:600;">
+        <img th:src="@{/images/Logo.png}" src="/images/LogoRight.png" alt="Logo"
+             style="height:30px; display:inline-block; margin-top:-5px; margin-right:5px;">
+        বাংলাদেশ হাউজ বিল্ডিং ফাইন্যান্স কর্পোরেশন
+      </a>
+    </div>
+
+    <!-- Navbar Links -->
+    <div class="collapse navbar-collapse" id="mainNavbar">
+      <ul class="nav navbar-nav navbar-right">
+
+        <!-- Show username -->
+        <li class="navbar-text Bangla-font" style="color:#fff; margin-right:15px;">
+          <i class="glyphicon glyphicon-user"></i> 
+          <span th:text="${session.UserID}">Username</span>
+        </li>
+
+        <!-- Bill Info menu only for bhbfcorporation -->
+        <li th:if="${session.UserID} == 'bhbfcorporation'">
+          <a th:href="@{/GetBillInfo.do}" class="btn btn-info navbar-btn" style="margin-right:5px; color:#fff;">
+            <i class="glyphicon glyphicon-info-sign"></i> Bill Info
+          </a>
+        </li>
+
+        <!-- Password Reset -->
+        <li>
+          <a th:href="@{/password-reset}" class="btn btn-warning navbar-btn" style="margin-right:5px; color:#fff;">
+            <i class="glyphicon glyphicon-lock"></i> পাসওয়ার্ড রিসেট
+          </a>
+        </li>
+
+        <!-- Logout -->
+        <li>
+          <a th:href="@{/logout}" class="btn btn-danger navbar-btn" style="margin-right:5px;">
+            <i class="glyphicon glyphicon-log-out"></i> লগআউট
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+
+<!-- ================= Verification Form ================= -->
+<div id="verifyForm" class="form-container panel panel-default" th:object="${nidDTO}">
+  <div class="panel-body">
+
+    <!-- ===== Header with Two Logos ===== -->
+    <div class="row text-center" style="margin-bottom: 20px;">
+      <div class="col-xs-3 text-left">
+        <img th:src="@{/images/NID.jpg}" src="/images/NID.jpg" alt="Left Logo" style="height: 80px;">
+      </div>
+      <div class="col-xs-6">
+        <h3 class="Bangla-font" style="color:#2E8B57;">বাংলাদেশ হাউজ বিল্ডিং ফাইন্যান্স কর্পোরেশন</h3>
+        <h4 class="Bangla-font" style="color:#333;">জাতীয় পরিচয় পত্রের তথ্য যাচাই</h4>
+      </div>
+      <div class="col-xs-3 text-right">
+        <img th:src="@{/images/Logo.png}" src="/images/LogoRight.png" alt="Right Logo" style="height: 80px;">
+      </div>
+    </div>
+
+    <hr class="section-divider">
+
+    <!-- ===== Input Fields ===== -->
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="form-group">
+          <label><i class="glyphicon glyphicon-credit-card"></i> NID/Voter ID/Form No</label>
+          <input type="text" id="identifier" th:field="*{nid}" class="form-control" placeholder="উদাহরণ: 1234567890" required>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="form-group">
+          <label><i class="glyphicon glyphicon-list-alt"></i> ID Type</label>
+          <select id="idType" th:field="*{type}" class="form-control" required>
+            <option value="">-- নির্বাচন করুন --</option>
+            <option value="nid10Digit">10 Digit</option>
+            <option value="nid17Digit">17 Digit</option>
+            <option value="voterId">Voter ID</option>
+            <option value="voterNo">Voter No</option>
+            <option value="formNo">Form No</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="form-group">
+          <label><i class="glyphicon glyphicon-user"></i> গ্রাহকের নাম</label>
+          <input type="text" id="name" th:field="*{name}" class="form-control" placeholder="বাংলায় পূর্ণ নাম" required>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="form-group">
+          <label><i class="glyphicon glyphicon-user"></i> Borrower Name (English)</label>
+          <input type="text" id="nameEn" th:field="*{nameEn}" class="form-control" placeholder="Full Name in English" required>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-6">
+        <div class="form-group">
+          <label><i class="glyphicon glyphicon-calendar"></i> জন্ম তারিখ</label>
+          <input type="date" id="dob" th:field="*{dob}" class="form-control" required>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="form-group">
+          <label><i class="glyphicon glyphicon-user"></i> পিতার নাম</label>
+          <input type="text" id="father" th:field="*{fname}" class="form-control" placeholder="পিতার পূর্ণ নাম" required>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-6 col-sm-offset-3">
+        <div class="form-group">
+          <label><i class="glyphicon glyphicon-user"></i> মাতার নাম</label>
+          <input type="text" id="mother" th:field="*{mname}" class="form-control" placeholder="মাতার পূর্ণ নাম" required>
+        </div>
+      </div>
+    </div>
+
+    <hr class="section-divider">
+
+    <div class="text-center">
+      <button id="verifyId" type="button" class="btn btn-success btn-lg" style="padding: 10px 30px;">
+        <i class="glyphicon glyphicon-ok"></i> তথ্য যাচাই করুন
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Result Section ===== -->
+<div id="DataViewId" class="form-container" style="display: none;">
+  <div class="row text-center" style="margin-bottom: 15px;">
+    <div class="col-xs-3 text-left">
+      <img th:src="@{/images/NID.jpg}" src="/images/NID.jpg" alt="Left Logo" style="height: 80px;">
+    </div>
+    <div class="col-xs-6">
+      <h3 class="Bangla-font">বাংলাদেশ হাউজ বিল্ডিং ফাইন্যান্স কর্পোরেশন</h3>
+      <h5 class="Bangla-font">জাতীয় পরিচয় পত্রের তথ্য যাচাই</h6>
+    </div>
+    <div class="col-xs-3 text-right">
+      <img th:src="@{/images/Logo.png}" src="/images/LogoRight.png" alt="Right Logo" style="height: 80px;">
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <div class="text-center">
+    <h3 id="NIDView" class="Bangla-font"></h3>
+    <h4 id="MatchResult" class="Bangla-font" style="margin-top: 10px;"></h4>
+  </div>
+
+  <hr class="section-divider">
+  
+  
+  <!-- Right: Photo -->
+    <div class="col-xs-4 text-center">
+      <label class="Bangla-font" style="font-weight:bold;">গ্রাহকের ছবি</label>
+      <div style="border:1px solid #ccc; padding:5px; display:inline-block; border-radius:5px;">
+        <img id="nidPhoto" src="/images/default-user.png" alt="NID Photo" style="max-width:100%; height:auto; border-radius:5px;">
+      </div>
+    </div>
+  
+  <div class="Bangla-font" style="line-height: 1.8; font-size: 16px; margin: 0 5%;">
+    <p>১। গ্রাহকের নাম: <strong id="nameView"></strong> <span id="nameIsMatch"></span></p>
+    <p>২। Borrower Name: <strong id="nameEnView"></strong> <span id="nameEnIsMatch"></span></p>
+    <p>৩। জন্ম তারিখ: <strong id="dobView"></strong> <span id="dobIsMatch"></span></p>
+    <p>৪। পিতার নাম: <strong id="fatherView"></strong> <span id="fatherIsMatch"></span></p>
+    <p>৫। মাতার নাম: <strong id="motherView"></strong> <span id="motherIsMatch"></span></p>
+  </div>
+
+
+
+
+  
+
+
+
+
+  <hr class="section-divider">
+
+  <div class="text-center" style="margin-top: 30px;">
+    <p><strong>যাচাইকারী:</strong> <span id="verifyBy" style="color:#2E8B57;font-weight:600;"></span></p>
+    <p><strong>বাংলাদেশ হাউজ বিল্ডিং ফাইন্যান্স কর্পোরেশন</strong></p>
+
+    <div style="margin-top: 40px;">
+      <hr style="border-top:1px solid #000;">
+      <p style="font-size:14px;">স্বাক্ষর ও সীল</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Action Buttons ===== -->
+<div class="text-center" style="margin-top: 20px;">
+  <button id="printId" class="btn btn-success" style="display: none;">Print Verification</button>
+  <button id="verifyAgainId" class="btn btn-danger" style="display: none;">Verify Again</button>
+</div>
+
+<script defer>
+$(function () {
+    const $printBtn = $("#printId");
+    const $dataView = document.getElementById("DataViewId");
+
+    // Bind print button safely (only once)
+    $printBtn.off("click").on("click", function () {
+        if (!$dataView) return;
+
+        html2pdf($dataView, {
+            margin: 10,
+            filename: ($("#nameEn").val() || "Verification") + ".pdf",
+            image: { type: "jpeg", quality: 0.98 },
+            html2canvas: { scale: 2, useCORS: true },
+            jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
+        });
+    });
+
+    // Verification form logic
+    const $form = $("#verifyForm"), $verifyAgain = $("#verifyAgainId");
+
+    $("#verifyId").on("click", VerifyNID);
+    $verifyAgain.on("click", VerifyAgain);
+
+    function VerifyAgain() {
+        $form.show();
+        $dataView.style.display = "none";
+        $printBtn.hide();
+        $verifyAgain.hide();
+    }
+
+    function VerifyNID() {
+        const payload = {
+            nid: $("#identifier").val(),
+            type: $("#idType").val(),
+            name: $("#name").val(),
+            nameEn: $("#nameEn").val(),
+            dob: $("#dob").val(),
+            fname: $("#father").val(),
+            mname: $("#mother").val()
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "/BorrowerVerification",
+            contentType: "application/json",
+            data: JSON.stringify(payload),
+            success: function (res) {
+                const data = JSON.parse(res || "{}");
+                if (data.status !== "200") {
+                    alert("Error in Validation NID Info");
+                    return;
+                }
+
+                $form.hide();
+                $dataView.style.display = "block";
+                $printBtn.show();
+                $verifyAgain.show();
+
+                const labels = {
+                    nid10Digit: "জাতীয় পরিচয় পত্র (১০ ডিজিট):- ",
+                    nid17Digit: "জাতীয় পরিচয় পত্র (১৭ ডিজিট):- ",
+                    voterId: "ভোটার আইডি নম্বর:- ",
+                    voterNo: "ভোটার নম্বর:- ",
+                    formNo: "ফর্ম নম্বর:- "
+                };
+
+                $("#NIDView").text(labels[$("#idType").val()] + $("#identifier").val());
+                $("#MatchResult").text(data.statusMessage);
+                $("#verifyBy").text(data.UserInfo);
+                $("#nameView").text(data.name);
+                $("#nameEnView").text(data.nameEn);
+                $("#dobView").text(data.dob);
+                $("#fatherView").text(data.fname);
+                $("#motherView").text(data.mname);
+                
+                
+                if(data.photo) {
+                    document.getElementById("nidPhoto").src = data.photo;
+                } else {
+                    document.getElementById("nidPhoto").src = "/images/default-user.png";
+                }
+
+                updateMatch("#nameIsMatch", data.nameStatus);
+                updateMatch("#nameEnIsMatch", data.nameEnStatus);
+                updateMatch("#dobIsMatch", data.dobStatus);
+                updateMatch("#fatherIsMatch", data.fanmeStatus);
+                updateMatch("#motherIsMatch", data.mnameStatus);
+            },
+            error: function () {
+                alert("Server Error! Please try again.");
+            }
+        });
+    }
+
+    function updateMatch(id, matched) {
+        $(id).text(matched ? "(Matched)" : "(Not Matched!!)")
+             .css("color", matched ? "green" : "red");
+    }
+});
+</script>
+
+
+
+
+
+
+
+</body>
+</html>

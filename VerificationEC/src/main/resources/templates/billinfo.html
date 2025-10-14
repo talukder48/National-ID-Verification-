@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <title>Bill Info | BHBF</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    
+    <style>
+        body { font-family: 'Nikosh', sans-serif; background-color: #f5f5f5; }
+        .container { margin-top: 80px; }
+        .panel-heading { background-color: #2E8B57 !important; color: #fff !important; font-weight: 600; }
+        table { margin-top: 20px; }
+        .summary { margin-bottom: 20px; font-size: 16px; }
+        .summary strong { color: #2E8B57; }
+        .filter-row { margin-bottom: 20px; }
+        #exportBtn {
+            background-color: #2E8B57;
+            color: #fff;
+            border: none;
+            padding: 8px 20px;
+            font-size: 15px;
+            border-radius: 4px;
+            margin-top: 15px;
+        }
+        #exportBtn:hover {
+            background-color: #256c46;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== Top Header / Navbar ===== -->
+<nav class="navbar navbar-default navbar-fixed-top-custom" style="background-color:#2E8B57; border:none; border-radius:0;">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#mainNavbar">
+        <span class="icon-bar" style="background-color:#fff;"></span>
+        <span class="icon-bar" style="background-color:#fff;"></span>
+        <span class="icon-bar" style="background-color:#fff;"></span>
+      </button>
+
+      <a class="navbar-brand Bangla-font" href="/" style="color:#fff; font-weight:600;">
+        <img th:src="@{/images/Logo.png}" src="/images/LogoRight.png" alt="Logo"
+             style="height:30px; display:inline-block; margin-top:-5px; margin-right:5px;">
+        বাংলাদেশ হাউজ বিল্ডিং ফাইন্যান্স কর্পোরেশন
+      </a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="mainNavbar">
+      <ul class="nav navbar-nav navbar-right">
+        <li class="navbar-text Bangla-font" style="color:#fff; margin-right:15px;">
+          <i class="glyphicon glyphicon-user"></i> 
+          <span th:text="${session.UserID}">Username</span>
+        </li>
+        <li th:if="${session.UserID} == 'bhbfcorporation'">
+          <a th:href="@{/GetBillInfo.do}" class="btn btn-info navbar-btn" style="margin-right:5px; color:#fff;">
+            <i class="glyphicon glyphicon-info-sign"></i> Bill Info
+          </a>
+        </li>
+        <li>
+          <a th:href="@{/password-reset}" class="btn btn-warning navbar-btn" style="margin-right:5px; color:#fff;">
+            <i class="glyphicon glyphicon-lock"></i> পাসওয়ার্ড রিসেট
+          </a>
+        </li>
+        <li>
+          <a th:href="@{/logout}" class="btn btn-danger navbar-btn" style="margin-right:5px;">
+            <i class="glyphicon glyphicon-log-out"></i> লগআউট
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+
+    <div th:if="${errorMessage}" class="alert alert-danger">
+        <strong>Warning!</strong> <span th:text="${errorMessage}"></span>
+    </div>
+
+    <div id="billReport" class="panel panel-default">
+		
+		<!-- ===== Header with Two Logos ===== -->
+    <div class="row text-center" style="margin-bottom: 20px;">
+      <div class="col-xs-3 text-left">
+        <img th:src="@{/images/NID.jpg}" src="/images/NID.jpg" alt="Left Logo" style="height: 80px;">
+      </div>
+      <div class="col-xs-6">
+        <h3 class="Bangla-font" style="color:#2E8B57;">বাংলাদেশ হাউজ বিল্ডিং ফাইন্যান্স কর্পোরেশন</h3>
+        <h4 class="Bangla-font" style="color:#333;">জাতীয় পরিচয় পত্রের তথ্য যাচাই</h4>
+      </div>
+      <div class="col-xs-3 text-right">
+        <img th:src="@{/images/Logo.png}" src="/images/LogoRight.png" alt="Right Logo" style="height: 80px;">
+      </div>
+    </div>
+		
+        <div class="panel-heading text-center">BHBFC Billing Info</div>
+        <div class="panel-body">
+
+            <!-- ===== Date Filter ===== -->
+            <form th:action="@{/GetBillInfo.do}" method="get" class="form-inline filter-row text-center">
+                <div class="form-group">
+                    <label for="fromDate">From:</label>
+                    <input type="date" id="fromDate" name="fromDate" class="form-control" 
+                           th:value="${fromDate}" required>
+                </div>
+                <div class="form-group">
+                    <label for="toDate">To:</label>
+                    <input type="date" id="toDate" name="toDate" class="form-control" 
+                           th:value="${toDate}" required>
+                </div>
+                <button type="submit" class="btn btn-success" style="margin-left:10px;">
+                    <i class="glyphicon glyphicon-search"></i> Get Bill Info
+                </button>
+            </form>
+
+            <!-- ===== Summary Section ===== -->
+            <div class="summary text-center">
+                <p>Generated Time: <strong th:text="${BillInfo.generatedTime}">2025-05-31</strong></p>
+                <p>Total Calls: <strong th:text="${BillInfo.totalCallCount}">0</strong>, 
+                   Success: <strong th:text="${BillInfo.totalSuccessCount}">0</strong>, 
+                   Failed: <strong th:text="${BillInfo.totalFailedCount}">0</strong>, 
+                   Processing: <strong th:text="${BillInfo.totalProcessingCount}">0</strong></p>
+                <p>Total Bill Amount: <strong th:text="${BillInfo.totalBill}">0.00</strong></p>
+            </div>
+
+            <!-- ===== Table Section ===== -->
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead style="background-color:#2E8B57; color:#fff;">
+                        <tr>
+                            <th>Partner ID</th>
+                            <th>User Name</th>
+                            <th>Total Calls</th>
+                            <th>Success</th>
+                            <th>Failed</th>
+                            <th>Processing</th>
+                            <th>Bill Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="bean : ${BillInfoUserWise}">
+                            <td th:text="${bean.partnerId}">0</td>
+                            <td th:text="${bean.username}">User Name</td>
+                            <td th:text="${bean.callCount}">0</td>
+                            <td th:text="${bean.successCount}">0</td>
+                            <td th:text="${bean.failedCount}">0</td>
+                            <td th:text="${bean.processingCount}">0</td>
+                            <td th:text="${bean.bill}">0.00</td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(BillInfoUserWise)}">
+                            <td colspan="7" class="text-center">No billing data available</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- ===== Export to PDF Button ===== -->
+            <div class="text-center">
+                <button id="exportBtn">
+                    <i class="glyphicon glyphicon-download"></i> Export as PDF
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- ===== JS Dependencies ===== -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+
+<script>
+$(function () {
+    $("#exportBtn").on("click", function () {
+        const element = document.getElementById("billReport");
+        const opt = {
+            margin: 10,
+            filename: "Bill_Report.pdf",
+            image: { type: "jpeg", quality: 0.98 },
+            html2canvas: { scale: 2, useCORS: true },
+            jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
+        };
+        html2pdf().set(opt).from(element).save();
+    });
+});
+</script>
+
+</body>
+</html>

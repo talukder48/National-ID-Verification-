@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <title>লগইন | NID যাচাই পোর্টাল</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap 3 -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <!-- Google Fonts (Bangla + English clean font) -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;600&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #e9f5ef, #d1e7dd);
+            font-family: 'Noto Sans Bengali', 'Roboto', sans-serif;
+        }
+
+        .login-container {
+            max-width: 400px;
+            margin: 80px auto;
+            padding: 30px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .login-header img {
+            height: 70px;
+            margin-bottom: 10px;
+        }
+
+        .login-header h4 {
+            margin-bottom: 25px;
+            color: #2e7d32;
+            font-weight: 600;
+        }
+
+        .form-group label {
+            float: left;
+            color: #2e7d32;
+            font-weight: 600;
+        }
+
+        .btn-login {
+            background-color: #2e7d32;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 0;
+            width: 100%;
+            font-size: 16px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .btn-login:hover {
+            background-color: #256227;
+        }
+
+        .footer-text {
+            margin-top: 20px;
+            color: #777;
+            font-size: 13px;
+        }
+
+        .alert {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <img th:src="@{/images/Logo.png}" src="/images/NID.jpg" alt="NID Logo">
+            <h4>জাতীয় পরিচয়পত্র যাচাই লগইন</h4>
+        </div>
+
+        <!-- Login Form -->
+        <form th:action="@{/loginVerify}" method="post">
+            <div th:if="${param.error}" class="alert alert-danger">ভুল ইউজারনেম বা পাসওয়ার্ড!</div>
+            <div th:if="${param.logout}" class="alert alert-success">সফলভাবে লগআউট করা হয়েছে।</div>
+
+            <div class="form-group">
+                <label for="username">ইউজার নাম</label>
+                <input type="text" id="username" name="username" class="form-control" placeholder="ইউজারনেম লিখুন" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">পাসওয়ার্ড</label>
+                <input type="password" id="password" name="password" class="form-control" placeholder="পাসওয়ার্ড লিখুন" required>
+            </div>
+
+            <button type="submit" class="btn btn-login">লগইন করুন</button>
+        </form>
+
+        <div class="footer-text">
+            <p>
+		  © <span th:text="${T(java.time.Year).now()}"></span>
+		  <span th:text="${@environment.getProperty('institute')}"></span>
+		</p>
+
+        </div>
+    </div>
+
+    <!-- JS Dependencies -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</body>
+</html>
