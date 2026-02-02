@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>app.hm</groupId>
-	<artifactId>HousingXYZ</artifactId>
+	<artifactId>eTenderBHbfc</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>HousingXYZ</name>
 	<description>Smart Housing Constraction Management</description>
