@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Tender Bid Report</title>
+
+<style>
+@page {
+    size: A4 portrait;
+    margin: 14mm 12mm 16mm 12mm;
+}
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    font-size: 11.5px;
+    color: #111827;
+    background: #ffffff;
+}
+.header {
+    text-align: center;
+    border-bottom: 3px solid #1f3a5f;
+    padding-bottom: 14px;
+    margin-bottom: 20px;
+}
+.header h2 {
+    margin: 4px 0 2px;
+    font-size: 20px;
+    font-weight: 700;
+    color: #1f3a5f;
+}
+.header p {
+    margin: 2px 0;
+    font-size: 11px;
+    color: #475569;
+}
+table.pl {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 18px;
+}
+table.pl th {
+    background: #e2e8f0;
+    color: #1f3a5f;
+    border: 1px solid #94a3b8;
+    padding: 6px;
+    font-size: 11px;
+    text-transform: uppercase;
+}
+table.pl td {
+    border: 1px solid #cbd5e1;
+    padding: 6px;
+}
+table.pl tbody tr:nth-child(even) {
+    background: #f8fafc;
+}
+.section-title {
+    margin-top: 22px;
+    margin-bottom: 6px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #1f3a5f;
+    border-left: 4px solid #1f3a5f;
+    padding-left: 8px;
+}
+.signature-area {
+    margin-top: 50px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+}
+.sig-block {
+    width: 30%;
+    text-align: center;
+}
+.sig-line {
+    margin-top: 45px;
+    border-top: 1px solid #111;
+    padding-top: 6px;
+    font-weight: 600;
+}
+.footer {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 9.5px;
+    color: #6b7280;
+    border-top: 1px solid #d1d5db;
+    padding-top: 6px;
+}
+@media print {
+    .print-btn { display: none; }
+}
+</style>
+</head>
+
+<body>
+
+<button class="print-btn" onclick="window.print()">🖨 Print / Save PDF</button>
+
+<!-- ================= HEADER ================= -->
+<div class="header">
+    <h2><strong>Bangladesh House Building Finance Corporation (BHBFC)</strong></h2>
+
+    <p>
+        22, Purana Paltan.Head Office, Dhaka-1000
+    </p>
+
+    <p>
+        Application ID:
+        <strong th:text="${bid.id}">---</strong>
+        &nbsp; | &nbsp;
+        Submitted On:
+        <span th:text="${#temporals.format(bid.createdDate,'dd MMM yyyy')}">---</span>
+        &nbsp; | &nbsp;
+        Status:
+        <strong th:text="${bid.status}">---</strong>
+    </p>
+</div>
+
+
+<!-- APPLICANT INFO -->
+<div class="section-title">Applicant Information</div>
+<table class="pl">
+    <tbody>
+        <tr><td>Full Name</td><td th:text="${bid.user.name}"></td></tr>
+        <tr><td>Email</td><td th:text="${bid.user.username}"></td></tr>
+        <tr><td>Phone</td><td th:text="${bid.user.phone}"></td></tr>
+        <tr><td>NID Number</td><td th:text="${bid.user.nidNumber} ?: 'Not Provided'"></td></tr>
+        <tr><td>Business Name</td><td th:text="${bid.user.businessName} ?: 'Not Provided'"></td></tr>
+        <tr><td>Trade License</td><td th:text="${bid.user.tradeLicenseNo} ?: 'Not Provided'"></td></tr>
+    </tbody>
+</table>
+
+<!-- PERSONAL INFO -->
+<div class="section-title">Personal Information</div>
+<table class="pl">
+    <tbody>
+        <tr><td>Father / Spouse Name</td><td th:text="${bid.user.fatherOrSpouseName} ?: 'Not Provided'"></td></tr>
+        <tr><td>Nationality</td><td th:text="${bid.user.nationality} ?: 'Not Provided'"></td></tr>
+        <tr><td>Religion</td><td th:text="${bid.user.religion} ?: 'Not Provided'"></td></tr>
+    </tbody>
+</table>
+
+<!-- ADDRESS INFO -->
+<div class="section-title">Address Information</div>
+<table class="pl">
+    <tbody>
+        <tr><td>Present Address</td><td th:text="${bid.user.presentAddress} ?: 'Not Provided'"></td></tr>
+        <tr><td>Permanent Address</td><td th:text="${bid.user.permanentAddress} ?: 'Not Provided'"></td></tr>
+    </tbody>
+</table>
+
+<!-- ================= BUSINESS & TAX INFORMATION ================= -->
+<div class="section-title">Business & Tax Information</div>
+<table class="pl">
+    <tbody>
+        <tr>
+            <td>Business Name</td>
+            <td th:text="${bid.user.businessName} ?: 'Not Provided'"></td>
+        </tr>
+        <tr>
+            <td>Business Type</td>
+            <td th:text="${bid.user.businessType} ?: 'Not Provided'"></td>
+        </tr>
+        <tr>
+            <td>Trade License Number</td>
+            <td th:text="${bid.user.tradeLicenseNo} ?: 'Not Provided'"></td>
+        </tr>
+        <tr>
+            <td>Trade License Renewal Date</td>
+            <td th:text="${bid.user.tradeLicenseRenewalDate != null 
+                ? #temporals.format(bid.user.tradeLicenseRenewalDate,'dd MMM yyyy') 
+                : 'Not Provided'}">
+            </td>
+        </tr>
+        <tr>
+            <td>TIN Number</td>
+            <td th:text="${bid.user.tinNumber} ?: 'Not Provided'"></td>
+        </tr>
+    </tbody>
+</table>
+
+
+<!-- SHOP BIDS -->
+<div class="section-title">Shop Bid Details</div>
+<table class="pl">
+    <thead>
+        <tr>
+            <th>Shop No</th>
+            <th>Location</th>
+            <th>Main Floor</th>
+            <th>Mezzanine</th>
+            <th>Rent</th>
+            <th>Security</th>
+            <th>Total Area</th>
+            <th>Annual Rent</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="sb : ${bid.shopBids}">
+            <td th:text="${sb.shop.number}"></td>
+            <td th:text="${sb.shop.location}"></td>
+            <td th:text="${sb.shop.areaMainFloor}"></td>
+            <td th:text="${sb.shop.areaMezzanineFloor}"></td>
+            <td th:text="${sb.rentAmount}"></td>
+            <td th:text="${sb.securityAmount}"></td>
+            <td th:text="${sb.shop.areaMainFloor + sb.shop.areaMezzanineFloor}"></td>
+            <td th:text="${(sb.shop.areaMainFloor + sb.shop.areaMezzanineFloor) * sb.rentAmount}"></td>
+        </tr>
+    </tbody>
+</table>
+
+<!-- DOCUMENTS -->
+<div class="section-title">Submitted Documents</div>
+<table class="pl">
+    <thead>
+        <tr><th>Name</th><th>Type</th><th>Path</th></tr>
+    </thead>
+    <tbody>
+        <tr th:each="att : ${bid.attachments}">
+            <td th:text="${att.name}"></td>
+            <td th:text="${att.type}"></td>
+            <td th:text="${att.filePath}"></td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="signature-area">
+    <div class="sig-block"><span class="sig-line">Prepared By</span></div>
+    <div class="sig-block"><span class="sig-line">Reviewed By</span></div>
+    <div class="sig-block"><span class="sig-line">Approved By</span></div>
+</div>
+
+<div class="footer">
+    Generated on <span th:text="${#temporals.format(T(java.time.LocalDateTime).now(),'dd MMM yyyy HH:mm')}"></span>
+</div>
+
+</body>
+</html>

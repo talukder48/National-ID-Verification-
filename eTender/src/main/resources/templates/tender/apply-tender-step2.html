@@ -1,0 +1,82 @@
+<form th:action="@{/bidder/apply-tender-step2/{id}(id=${tenderBid.id})}" method="post" enctype="multipart/form-data">
+    
+    <div class="card mb-4">
+        <div class="card-header bg-light d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">Upload Required Documents</h4>
+            <span class="badge bg-primary">7 Documents Required</span>
+        </div>
+        <div class="card-body">
+
+            <div id="documents-container">
+                <div th:each="i : ${#numbers.sequence(0,6)}" class="document-row mb-3 d-flex align-items-center gap-2">
+                    
+                    <!-- Document Type -->
+                    <select name="attachmentTypes" class="form-select document-type" required onchange="validateForm()">
+                        <option value="" disabled selected>Select document type...</option>
+                        <option value="ID_DOC">National ID</option>
+                        <option value="PHOTO">Passport Photo</option>
+                        <option value="LICENSE">Trade License</option>
+                        <option value="TAX_CERT">Income Tax Certificate</option>
+                        <option value="VAT_DOC">VAT Registration</option>
+                        <option value="BANK_SOLVENCY">Bank Solvency Certificate</option>
+                        <option value="MEMO">Memorandum & Articles</option>
+                    </select>
+
+                    <!-- Document Name -->
+                    <input type="text" name="attachmentNames" class="form-control document-name" placeholder="Document Name"  onchange="validateForm()">
+
+                    <!-- File Input -->
+                    <input type="file" name="attachmentFiles" class="form-control document-file" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" required onchange="validateForm()">
+                    
+                </div>
+            </div>
+
+        </div>
+        <div class="card-footer text-end">
+            <button type="submit" class="btn btn-success" id="submit-btn" disabled>
+                <i class="bi bi-send-check me-1"></i> Submit Tender Application
+            </button>
+        </div>
+    </div>
+</form>
+
+<script>
+    function validateForm() {
+        const rows = document.querySelectorAll('.document-row');
+        const selectedTypes = new Set();
+        let allFilled = true;
+        let duplicateFound = false;
+
+        rows.forEach(row => {
+            const type = row.querySelector('.document-type').value;
+            const name = row.querySelector('.document-name').value.trim();
+            const file = row.querySelector('.document-file').files[0];
+
+            if (!type || !name || !file) {
+                allFilled = false;
+            }
+
+            if (type) {
+                if (selectedTypes.has(type)) duplicateFound = true;
+                selectedTypes.add(type);
+            }
+        });
+
+        const submitBtn = document.getElementById('submit-btn');
+        submitBtn.disabled = !(allFilled && !duplicateFound && selectedTypes.size === 7);
+    }
+
+    document.addEventListener('DOMContentLoaded', validateForm);
+</script>
+
+<style>
+.document-row {
+    transition: all 0.3s ease;
+}
+.document-row:hover {
+    background-color: #f8f9fa;
+}
+.document-type, .document-name, .document-file {
+    flex: 1;
+}
+</style>

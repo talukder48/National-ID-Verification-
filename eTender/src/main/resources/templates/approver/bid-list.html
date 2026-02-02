@@ -1,0 +1,315 @@
+<div class="container mt-4">
+    <!-- Header Section -->
+    <div class="card mb-4 border-0 shadow-sm">
+        <div class="card-body p-4">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="bg-primary bg-opacity-10 p-3 rounded-circle me-3">
+                            <i class="bi bi-file-earmark-text fs-3 text-primary"></i>
+                        </div>
+                        <div>
+                            <h1 class="h3 mb-1 fw-bold">ALl Submitted Bids</h1>
+                            <p class="text-muted mb-0">Track the status of all your tender applications</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="bg-light p-3 rounded text-center">
+                        <h4 class="fw-bold text-primary mb-0" th:text="${#lists.size(bids)}">0</h4>
+                        <small class="text-muted">Total Applications</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Status Summary Cards -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="card status-card border-start border-warning border-4">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-warning bg-opacity-10 p-3 rounded me-3">
+                            <i class="bi bi-clock-history fs-4 text-warning"></i>
+                        </div>
+                        <div>
+                            <h6 class="text-muted mb-1">Pending Review</h6>
+                            <h3 class="mb-0 fw-bold" th:text="${pendingCount}">0</h3>
+                            <small class="text-muted">Under evaluation</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card status-card border-start border-success border-4">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-success bg-opacity-10 p-3 rounded me-3">
+                            <i class="bi bi-check-circle fs-4 text-success"></i>
+                        </div>
+                        <div>
+                            <h6 class="text-muted mb-1">Approved</h6>
+                            <h3 class="mb-0 fw-bold" th:text="${approvedCount}">0</h3>
+                            <small class="text-muted">Successfully accepted</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card status-card border-start border-secondary border-4">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-secondary bg-opacity-10 p-3 rounded me-3">
+                            <i class="bi bi-hourglass-split fs-4 text-secondary"></i>
+                        </div>
+                        <div>
+                            <h6 class="text-muted mb-1">Other Status</h6>
+                            <h3 class="mb-0 fw-bold" th:text="${otherCount}">0</h3>
+                            <small class="text-muted">Rejected/In Progress</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bid Applications List -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-white border-bottom">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="mb-0 fw-semibold">My Applications</h5>
+                <div class="d-flex gap-2">
+                    <select class="form-select form-select-sm w-auto" id="statusFilter" onchange="filterBidsByStatus()">
+                        <option value="all">All Status</option>
+                        <option value="PENDING">Pending</option>
+                        <option value="APPROVED">Approved</option>
+                        <option value="OTHER">Other</option>
+                    </select>
+                    <div class="input-group input-group-sm" style="width: 200px;">
+                        <span class="input-group-text bg-transparent"><i class="bi bi-search"></i></span>
+                        <input type="text" class="form-control" placeholder="Search bids..." id="searchInput">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-4">Application</th>
+                            <th>Date Submitted</th>
+                            <th>Shops Applied</th>
+                            <th>Status</th>
+                            <th class="text-center pe-4">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bidsTableBody">
+                        <tr th:each="bid : ${bids}" th:data-status="${bid.status}" class="bid-row">
+                            <td class="ps-4">
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-light p-2 rounded me-3">
+                                        <i class="bi bi-file-earmark-text text-primary"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0 fw-semibold">BID-<span th:text="${bid.id}"></span></h6>
+                                        <small class="text-muted" th:text="${bid.user.name}"></small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-calendar3 text-muted me-2"></i>
+                                    <span th:text="${#temporals.format(bid.createdDate,'dd MMM yyyy')}"></span>
+                                </div>
+                                <small class="text-muted d-block">
+                                    <i class="bi bi-clock me-1"></i>
+                                    <span th:text="${#temporals.format(bid.createdDate,'hh:mm a')}"></span>
+                                </small>
+                            </td>
+                            <td>
+                                <span class="badge bg-light text-dark">
+                                    <i class="bi bi-shop me-1"></i>
+                                    <span th:text="${bid.shopBids != null ? bid.shopBids.size() : 0}">0</span> shops
+                                </span>
+                            </td>
+                            <td>
+                                <span th:switch="${bid.status}">
+									<span th:case="'SUBMITTED'" class="badge bg-warning bg-opacity-15 text-dark border border-dark border-opacity-25">
+									                                        <i class="bi bi-clock me-1"></i> Application Received
+									                                    </span>
+                                    <span th:case="'PENDING'" class="badge bg-warning bg-opacity-15 text-dark border border-warning border-opacity-25">
+                                        <i class="bi bi-clock me-1"></i> Pending
+                                    </span>
+                                    <span th:case="'APPROVED'" class="badge bg-success bg-opacity-15 text-dark border border-success border-opacity-25">
+                                        <i class="bi bi-check-circle me-1"></i> Approved
+                                    </span>
+									
+									<span th:case="'REJECTED'" class="badge bg-danger bg-opacity-15 text-dark border border-danger border-opacity-25">
+									                                        <i class="bi bi-check-circle me-1"></i> Rejected
+									                                    </span>
+									
+                                </span>
+                                <small class="d-block text-muted mt-1" th:if="${bid.status == 'PENDING'}">
+                                    Estimated review: 3-5 business days
+                                </small>
+                            </td>
+                            <td class="text-center pe-4">
+                                <a th:href="@{/approver/tender/{id}(id=${bid.id})}"
+                                   class="btn btn-sm btn-outline-primary px-3">
+                                    <i class="bi bi-eye me-1"></i> View Details
+                                </a>
+								<a th:href="@{/approver/tender/{id}/report(id=${bid.id})}"
+																   target="_blank"
+																   class="btn btn-outline-primary">
+																    <i class="bi bi-file-earmark-text me-1"></i>
+																    View Report
+								</a>
+                            </td>
+                        </tr>
+                        
+                        <!-- Empty State -->
+                        <tr th:if="${#lists.isEmpty(bids)}">
+                            <td colspan="5" class="text-center py-5">
+                                <div class="py-5">
+                                    <i class="bi bi-file-earmark-text fs-1 text-muted opacity-25"></i>
+                                    <h5 class="text-muted mt-3">No bids submitted yet</h5>
+                                    <p class="text-muted mb-0">Start by applying to available tenders</p>
+                                   
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Pagination/Footer -->
+        <div class="card-footer bg-white border-top">
+            <div class="d-flex justify-content-between align-items-center">
+                <small class="text-muted" id="showingText">
+                    Showing <span th:text="${#lists.size(bids)}">0</span> applications
+                </small>
+                <div class="text-muted small">
+                    <i class="bi bi-info-circle me-1"></i>
+                    Click "View Details" to see application status and documents
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Minimal JavaScript for Filtering -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('searchInput');
+        const statusFilter = document.getElementById('statusFilter');
+        
+        function filterBids() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const statusFilterValue = statusFilter.value;
+            const rows = document.querySelectorAll('.bid-row');
+            let visibleCount = 0;
+            
+            rows.forEach(row => {
+                const bidId = row.querySelector('h6').textContent.toLowerCase();
+                const bidderName = row.querySelector('small.text-muted').textContent.toLowerCase();
+                const status = row.dataset.status;
+                
+                const matchesSearch = bidId.includes(searchTerm) || bidderName.includes(searchTerm);
+                const matchesStatus = statusFilterValue === 'all' || 
+                    (statusFilterValue === 'PENDING' && status === 'PENDING') ||
+                    (statusFilterValue === 'APPROVED' && status === 'APPROVED') ||
+                    (statusFilterValue === 'OTHER' && status !== 'PENDING' && status !== 'APPROVED');
+                
+                if (matchesSearch && matchesStatus) {
+                    row.style.display = '';
+                    visibleCount++;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+            
+            // Update showing text
+            document.getElementById('showingText').innerHTML = 
+                `Showing <strong>${visibleCount}</strong> of <strong>${rows.length}</strong> applications`;
+            
+            // Show empty state if no results
+            const emptyRow = document.querySelector('tbody tr[colspan]');
+            if (visibleCount === 0 && rows.length > 0) {
+                if (!emptyRow) {
+                    const tbody = document.getElementById('bidsTableBody');
+                    const emptyMsg = document.createElement('tr');
+                    emptyMsg.innerHTML = `
+                        <td colspan="5" class="text-center py-5">
+                            <i class="bi bi-search fs-1 text-muted opacity-25"></i>
+                            <h5 class="text-muted mt-3">No matching bids found</h5>
+                            <p class="text-muted mb-0">Try adjusting your search or filter</p>
+                        </td>
+                    `;
+                    tbody.appendChild(emptyMsg);
+                }
+            } else if (emptyRow) {
+                emptyRow.remove();
+            }
+        }
+        
+        searchInput.addEventListener('input', filterBids);
+        statusFilter.addEventListener('change', filterBids);
+    });
+    
+    function filterBidsByStatus() {
+        // Already handled in the event listener above
+    }
+</script>
+
+<style>
+.status-card {
+    transition: transform 0.2s ease;
+}
+
+.status-card:hover {
+    transform: translateY(-2px);
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(13, 110, 253, 0.02);
+}
+
+.badge {
+    padding: 0.35em 0.65em;
+    font-weight: 500;
+}
+
+.card {
+    border-radius: 0.75rem;
+}
+
+.input-group-sm .form-control {
+    border-radius: 0.375rem;
+}
+
+.table th {
+    font-weight: 600;
+    color: #495057;
+    border-bottom-width: 2px;
+}
+
+.table td {
+    vertical-align: middle;
+    padding: 1rem 0.75rem;
+}
+
+.btn-outline-primary {
+    border-width: 1px;
+}
+
+.btn-outline-primary:hover {
+    background-color: #0d6efd;
+    color: white;
+}
+</style>
