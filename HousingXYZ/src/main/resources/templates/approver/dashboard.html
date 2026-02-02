@@ -1,0 +1,334 @@
+<div class="container mt-4">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">Tender Approval Dashboard</h2>
+            <p class="text-muted mb-0">Review and manage all submitted tender applications</p>
+        </div>
+        <div>
+            <a th:href="@{/approver/bidders/report}" 
+               class="btn btn-primary" 
+               target="_blank">
+                <i class="bi bi-printer me-2"></i>All Bidders Report
+            </a>
+        </div>
+    </div>
+
+    <!-- Stats Cards with Actions -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100 hover-lift">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <h6 class="text-muted mb-1">Pending Review</h6>
+                            <h2 class="fw-bold text-warning" th:text="${pendingBids}">0</h2>
+                            <small class="text-muted" th:if="${totalBids > 0}">
+                                <span th:text="${(pendingBids/totalBids*100).intValue()}">0</span>% of total bids
+                            </small>
+                        </div>
+                        <div class="bg-warning bg-opacity-10 p-3 rounded">
+                            <i class="bi bi-clock-history fs-3 text-warning"></i>
+                        </div>
+                    </div>
+                    <div class="d-grid">
+                        <a th:href="@{/approver/bids?status=SUBMITTED}" class="btn btn-warning btn-sm">
+                            <i class="bi bi-eye me-1"></i>Review Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100 hover-lift">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <h6 class="text-muted mb-1">Approved</h6>
+                            <h2 class="fw-bold text-success" th:text="${approvedBids}">0</h2>
+                            <small class="text-muted" th:if="${totalBids > 0}">
+                                <span th:text="${(approvedBids/totalBids*100).intValue()}">0</span>% approval rate
+                            </small>
+                        </div>
+                        <div class="bg-success bg-opacity-10 p-3 rounded">
+                            <i class="bi bi-check-circle fs-3 text-success"></i>
+                        </div>
+                    </div>
+                    <div class="d-grid">
+                        <a th:href="@{/approver/bids?status=APPROVED}" class="btn btn-outline-success btn-sm">
+                            <i class="bi bi-list-check me-1"></i>View Approved
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm h-100 hover-lift">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <h6 class="text-muted mb-1">Total Applications</h6>
+                            <h2 class="fw-bold" th:text="${totalBids}">0</h2>
+                            <small class="text-muted">All time submissions</small>
+                        </div>
+                        <div class="bg-primary bg-opacity-10 p-3 rounded">
+                            <i class="bi bi-file-earmark-text fs-3 text-primary"></i>
+                        </div>
+                    </div>
+                    <div class="d-grid">
+                        <a th:href="@{/approver/bids}" class="btn btn-outline-primary btn-sm">
+                            <i class="bi bi-folder2-open me-1"></i>View All
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Stats & Actions -->
+    <div class="row g-4 mb-4">
+        <!-- Recent Activity -->
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 fw-semibold">
+                        <i class="bi bi-activity me-2 text-primary"></i>Recent Applications
+                    </h5>
+                    <div class="btn-group btn-group-sm" role="group">
+                        <a th:href="@{/approver/bids}" class="btn btn-outline-primary">
+                            <i class="bi bi-list"></i> All Bids
+                        </a>
+                        <a th:href="@{/approver/bids?status=SUBMITTED}" class="btn btn-outline-warning">
+                            <i class="bi bi-clock"></i> Pending
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="ps-4">Application</th>
+                                    <th>Applicant</th>
+                                    <th>Status</th>
+                                    <th>Submitted</th>
+                                    <th class="text-end pe-4">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="bid : ${recentBids}" class="hover-highlight">
+                                    <td class="ps-4">
+                                        <div class="d-flex align-items-center">
+                                            <div class="bg-light p-2 rounded me-3">
+                                                <i class="bi bi-file-earmark-text"></i>
+                                            </div>
+                                            <div>
+                                                <h6 class="mb-0 fw-semibold">BID-<span th:text="${bid.id}"></span></h6>
+                                                <small class="text-muted">
+                                                    <span th:text="${bid.shopBids != null ? bid.shopBids.size() : 0}"></span> shops
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div>
+                                            <h6 class="mb-0 fw-semibold" th:text="${bid.user.name}"></h6>
+                                            <small class="text-muted" th:text="${bid.user.phone}"></small>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span th:switch="${bid.status}">
+                                            <span th:case="'SUBMITTED'" 
+                                                  class="badge bg-warning bg-opacity-15 text-dark border border-warning border-opacity-25">
+                                                <i class="bi bi-clock me-1"></i> PENDING
+                                            </span>
+                                            <span th:case="'APPROVED'" 
+                                                  class="badge bg-success bg-opacity-15 text-dark border border-success border-opacity-25">
+                                                <i class="bi bi-check-circle me-1"></i> APPROVED
+                                            </span>
+                                            <span th:case="'REJECTED'" 
+                                                  class="badge bg-danger bg-opacity-15 text-dark border border-danger border-opacity-25">
+                                                <i class="bi bi-x-circle me-1"></i> REJECTED
+                                            </span>
+                                            <span th:case="*" 
+                                                  class="badge bg-secondary bg-opacity-15 text-secondary border border-secondary border-opacity-25">
+                                                <i class="bi bi-dash-circle me-1"></i>
+                                                <span th:text="${bid.status}"></span>
+                                            </span>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <small class="text-muted">
+                                            <span th:text="${#temporals.format(bid.createdDate,'dd MMM yyyy')}"></span>
+                                            <br>
+                                            <span class="text-muted">
+                                                <i class="bi bi-clock me-1"></i>
+                                                <span th:text="${#temporals.format(bid.createdDate,'hh:mm a')}"></span>
+                                            </span>
+                                        </small>
+                                    </td>
+                                    <td class="text-end pe-4">
+                                        <div class="btn-group btn-group-sm" role="group">
+                                            <a th:href="@{/approver/tender/{id}(id=${bid.id})}" 
+                                               class="btn btn-outline-primary"
+                                               title="Review Application">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+                                            <a th:href="@{/approver/tender/{id}/report(id=${bid.id})}"
+                                               target="_blank"
+                                               class="btn btn-outline-info"
+                                               title="View Report">
+                                                <i class="bi bi-file-earmark-text"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <!-- Empty State -->
+                                <tr th:if="${recentBids == null or #lists.isEmpty(recentBids)}">
+                                    <td colspan="5" class="text-center py-5">
+                                        <div class="py-4">
+                                            <i class="bi bi-inbox fs-1 text-muted opacity-25"></i>
+                                            <h5 class="text-muted mt-3">No applications to review</h5>
+                                            <p class="text-muted mb-0">All applications have been processed</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions & Reports -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white border-bottom">
+                    <h5 class="mb-0 fw-semibold">
+                        <i class="bi bi-lightning-charge me-2 text-warning"></i>Quick Actions
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-3">
+                        <a th:href="@{/approver/bids?status=SUBMITTED}" class="btn btn-warning text-start py-3">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-white bg-opacity-25 p-2 rounded me-3">
+                                    <i class="bi bi-clock-history text-white"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-0 fw-semibold text-white">Review Pending Applications</h6>
+                                    <small class="text-white text-opacity-75">
+                                        <span th:text="${pendingBids}">0</span> applications awaiting review
+                                    </small>
+                                </div>
+                            </div>
+                        </a>
+                        
+                        <a th:href="@{/approver/bidders/report}" 
+                           target="_blank"
+                           class="btn btn-outline-primary text-start py-3">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-primary bg-opacity-10 p-2 rounded me-3">
+                                    <i class="bi bi-printer text-primary"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-0 fw-semibold">Generate Full Report</h6>
+                                    <small class="text-muted">All bidders with details</small>
+                                </div>
+                            </div>
+                        </a>
+                        
+                        <a th:href="@{/approver/bids?sort=createdDate,desc}" 
+                           class="btn btn-outline-info text-start py-3">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-info bg-opacity-10 p-2 rounded me-3">
+                                    <i class="bi bi-sort-down text-info"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-0 fw-semibold">Latest Applications</h6>
+                                    <small class="text-muted">Sort by submission date</small>
+                                </div>
+                            </div>
+                        </a>
+                        
+                        <a th:href="@{/approver/shops/report}" 
+                           target="_blank"
+                           class="btn btn-outline-secondary text-start py-3">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-secondary bg-opacity-10 p-2 rounded me-3">
+                                    <i class="bi bi-shop text-secondary"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-0 fw-semibold">Shop Allocation Report</h6>
+                                    <small class="text-muted">Shop-wise bid analysis</small>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<style>
+.hover-lift {
+    transition: all 0.3s ease;
+}
+
+.hover-lift:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+}
+
+.hover-highlight:hover {
+    background-color: rgba(13, 110, 253, 0.02) !important;
+}
+
+.chart-container {
+    position: relative;
+}
+
+.chart-bar {
+    position: relative;
+    height: 100%;
+}
+
+.chart-bar .progress {
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.chart-bar .progress-bar {
+    border-radius: 4px;
+}
+
+.card {
+    border-radius: 0.75rem;
+}
+
+.table th {
+    font-weight: 600;
+    color: #495057;
+    border-bottom-width: 2px;
+}
+
+.badge {
+    padding: 0.35em 0.65em;
+    font-weight: 500;
+}
+
+.btn-group-sm .btn {
+    padding: 0.25rem 0.5rem;
+}
+
+.list-group-item {
+    padding: 0.5rem 0;
+}
+</style>
