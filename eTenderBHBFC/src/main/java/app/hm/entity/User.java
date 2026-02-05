@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import app.hm.enums.UserRole;
 
 @Entity
+@Table(name = "user")  // Add this line
 public class User {
 
     @Id
