@@ -86,6 +86,8 @@ public class UserController {
                 .limit(5)
                 .toList());
 
+        
+        model.addAttribute("allBids", allBids);
         model.addAttribute("content", "approver/dashboard"); // Thymeleaf content file
         return layoutUtils.getLayout(auth);
     }

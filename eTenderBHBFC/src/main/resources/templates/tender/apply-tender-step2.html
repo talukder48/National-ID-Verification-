@@ -1,72 +1,165 @@
-<form th:action="@{/bidder/apply-tender-step2/{id}(id=${tenderBid.id})}" method="post" enctype="multipart/form-data">
-    
+<form id="uploadForm">
     <div class="card mb-4">
         <div class="card-header bg-light d-flex justify-content-between align-items-center">
-            <h4 class="mb-0">Upload Required Documents</h4>
-            <span class="badge bg-primary">7 Documents Required</span>
+            <h4 class="mb-0">ধাপ ২: প্রয়োজনীয় দলিল আপলোড</h4>
+            <span class="badge bg-primary">৭টি দলিল আবশ্যক</span>
         </div>
         <div class="card-body">
 
             <div id="documents-container">
-                <div th:each="i : ${#numbers.sequence(0,6)}" class="document-row mb-3 d-flex align-items-center gap-2">
-                    
-                    <!-- Document Type -->
-                    <select name="attachmentTypes" class="form-select document-type" required onchange="validateForm()">
-                        <option value="" disabled selected>Select document type...</option>
-                        <option value="ID_DOC">National ID</option>
-                        <option value="PHOTO">Passport Photo</option>
-                        <option value="LICENSE">Trade License</option>
-                        <option value="TAX_CERT">Income Tax Certificate</option>
-                        <option value="VAT_DOC">VAT Registration</option>
-                        <option value="BANK_SOLVENCY">Bank Solvency Certificate</option>
-                        <option value="MEMO">Memorandum & Articles</option>
-                    </select>
+                <div th:each="i : ${#numbers.sequence(0,6)}" class="document-row mb-3 d-flex align-items-center gap-2 p-2 border rounded">
 
-                    <!-- Document Name -->
-                    <input type="text" name="attachmentNames" class="form-control document-name" placeholder="Document Name"  onchange="validateForm()">
+                    <!-- Document Type Dropdown -->
+                    <select name="attachmentTypes" class="form-select document-type" required onchange="validateForm()">
+                        <option value="" disabled selected>দলিলের ধরন নির্বাচন করুন...</option>
+                        <option value="ID_DOC">জাতীয় পরিচয়পত্র (NID)</option>
+                        <option value="PHOTO">পাসপোর্ট সাইজ ছবি</option>
+                        <option value="LICENSE">ট্রেড লাইসেন্স</option>
+                        <option value="TAX_CERT">আয়কর সনদপত্র</option>
+                        <option value="VAT_DOC">ভ্যাট নিবন্ধন</option>
+                        <option value="BANK_SOLVENCY">ব্যাংক সলভেন্সি সনদ</option>
+                        <option value="MEMO">স্মারক ও প্রবন্ধ</option>
+                    </select>
 
                     <!-- File Input -->
                     <input type="file" name="attachmentFiles" class="form-control document-file" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" required onchange="validateForm()">
-                    
+
+                    <!-- Progress Bar -->
+                    <div class="progress flex-grow-1" style="height:20px;">
+                        <div class="progress-bar" role="progressbar" style="width:0%">0%</div>
+                    </div>
+
                 </div>
             </div>
 
+            <!-- Uploaded files list -->
+            <div class="mt-3">
+                <h6>আপলোডকৃত ফাইলসমূহ:</h6>
+                <ul id="uploaded-files" class="list-group list-group-flush"></ul>
+            </div>
+
         </div>
+
         <div class="card-footer text-end">
-            <button type="submit" class="btn btn-success" id="submit-btn" disabled>
-                <i class="bi bi-send-check me-1"></i> Submit Tender Application
-            </button>
+            <button type="button" class="btn btn-success" id="upload-btn" disabled>সমস্ত আপলোড করুন</button>
         </div>
     </div>
 </form>
 
 <script>
-    function validateForm() {
-        const rows = document.querySelectorAll('.document-row');
-        const selectedTypes = new Set();
-        let allFilled = true;
-        let duplicateFound = false;
+const uploadBtn = document.getElementById('upload-btn');
+const rows = document.querySelectorAll('.document-row');
+const uploadedFilesList = document.getElementById('uploaded-files');
 
-        rows.forEach(row => {
-            const type = row.querySelector('.document-type').value;
-            const name = row.querySelector('.document-name').value.trim();
-            const file = row.querySelector('.document-file').files[0];
+function validateForm() {
+    let allFilled = true;
+    const selectedTypes = new Set();
+    let duplicateFound = false;
+    let fileTooLarge = false;
 
-            if (!type || !name || !file) {
-                allFilled = false;
-            }
+    rows.forEach(row => {
+        const type = row.querySelector('.document-type').value;
+        const file = row.querySelector('.document-file').files[0];
 
-            if (type) {
-                if (selectedTypes.has(type)) duplicateFound = true;
-                selectedTypes.add(type);
-            }
+        row.classList.remove('border-danger');
+
+        if (!type || !file) allFilled = false;
+
+        if (type) {
+            if (selectedTypes.has(type)) duplicateFound = true;
+            selectedTypes.add(type);
+        }
+
+        if (file && file.size > 5 * 1024 * 1024) { // 5 MB limit
+            fileTooLarge = true;
+            row.classList.add('border-danger');
+        }
+    });
+
+    // Disable already selected types in other dropdowns
+    rows.forEach(row => {
+        const select = row.querySelector('.document-type');
+        const current = select.value;
+        select.querySelectorAll('option').forEach(opt => {
+            if (opt.value && opt.value !== current && selectedTypes.has(opt.value)) opt.disabled = true;
+            else opt.disabled = false;
         });
+    });
 
-        const submitBtn = document.getElementById('submit-btn');
-        submitBtn.disabled = !(allFilled && !duplicateFound && selectedTypes.size === 7);
+    uploadBtn.disabled = !(allFilled && !duplicateFound && !fileTooLarge && selectedTypes.size === 7);
+}
+
+// Upload one by one with progress bar
+async function uploadFiles() {
+    uploadBtn.disabled = true;
+
+    for (const row of rows) {
+        const fileInput = row.querySelector('.document-file');
+        const typeInput = row.querySelector('.document-type');
+        const progressBar = row.querySelector('.progress-bar');
+
+        const file = fileInput.files[0];
+        const type = typeInput.value;
+
+        if (!file) continue;
+
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("name", type); // document name = dropdown value
+        formData.append("type", type);
+        formData.append("tenderId", "[[${tenderBid.id}]]"); // Thymeleaf variable
+
+        await new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "/bidder/apply-tender-step2/upload-single", true);
+
+            xhr.upload.addEventListener("progress", e => {
+                if (e.lengthComputable) {
+                    const percent = Math.round((e.loaded / e.total) * 100);
+                    progressBar.style.width = percent + "%";
+                    progressBar.textContent = percent + "%";
+                }
+            });
+
+            xhr.onload = () => {
+                if (xhr.status === 200) {
+                    // Add to uploaded list
+                    const li = document.createElement("li");
+                    li.className = "list-group-item d-flex justify-content-between align-items-center";
+                    li.textContent = type;
+                    const badge = document.createElement("span");
+                    badge.className = "badge bg-success rounded-pill";
+                    badge.textContent = "আপলোড হয়েছে";
+                    li.appendChild(badge);
+                    uploadedFilesList.appendChild(li);
+                    resolve();
+                } else reject(xhr.responseText);
+            };
+
+            xhr.onerror = () => reject("আপলোড ব্যর্থ হয়েছে");
+            xhr.send(formData);
+        });
     }
 
-    document.addEventListener('DOMContentLoaded', validateForm);
+    // Call to complete tender
+    try {
+        const response = await fetch("/bidder/apply-tender-step2/complete/" + "[[${tenderBid.id}]]", {
+            method: "POST"
+        });
+
+        if (!response.ok) throw new Error("টেন্ডার সম্পূর্ণ করতে ব্যর্থ হয়েছে");
+
+        alert("সমস্ত দলিল সফলভাবে আপলোড হয়েছে!");
+        window.location.href = "/dashboard";
+
+    } catch (err) {
+        alert("টেন্ডার সম্পূর্ণ করতে ত্রুটি: " + err.message);
+    }
+}
+
+uploadBtn.addEventListener('click', uploadFiles);
+document.querySelectorAll('.document-type, .document-file').forEach(el => el.addEventListener('change', validateForm));
+document.addEventListener('DOMContentLoaded', validateForm);
 </script>
 
 <style>
@@ -76,7 +169,9 @@
 .document-row:hover {
     background-color: #f8f9fa;
 }
-.document-type, .document-name, .document-file {
-    flex: 1;
+.document-row.border-danger {
+    border: 2px solid red;
+    border-radius: 0.25rem;
 }
+.progress { margin-left: 0.5rem; }
 </style>

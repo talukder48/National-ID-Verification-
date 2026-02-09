@@ -2,14 +2,14 @@
     <!-- Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h2 class="fw-bold mb-1">Tender Approval Dashboard</h2>
-            <p class="text-muted mb-0">Review and manage all submitted tender applications</p>
+            <h2 class="fw-bold mb-1">টেন্ডার অনুমোদন ড্যাশবোর্ড</h2>
+            <p class="text-muted mb-0">জমা দেওয়া সমস্ত টেন্ডার আবেদন পর্যালোচনা ও পরিচালনা করুন</p>
         </div>
         <div>
             <a th:href="@{/approver/bidders/report}" 
                class="btn btn-primary" 
                target="_blank">
-                <i class="bi bi-printer me-2"></i>All Bidders Report
+                <i class="bi bi-printer me-2"></i>সকল আবেদনকারীর প্রতিবেদন
             </a>
         </div>
     </div>
@@ -21,10 +21,10 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start mb-3">
                         <div>
-                            <h6 class="text-muted mb-1">Pending Review</h6>
+                            <h6 class="text-muted mb-1">পর্যালোচনার অপেক্ষায়</h6>
                             <h2 class="fw-bold text-warning" th:text="${pendingBids}">0</h2>
                             <small class="text-muted" th:if="${totalBids > 0}">
-                                <span th:text="${(pendingBids/totalBids*100).intValue()}">0</span>% of total bids
+                                <span th:text="${(pendingBids/totalBids*100).intValue()}">0</span>% মোট আবেদনের মধ্যে
                             </small>
                         </div>
                         <div class="bg-warning bg-opacity-10 p-3 rounded">
@@ -33,7 +33,7 @@
                     </div>
                     <div class="d-grid">
                         <a th:href="@{/approver/bids?status=SUBMITTED}" class="btn btn-warning btn-sm">
-                            <i class="bi bi-eye me-1"></i>Review Now
+                            <i class="bi bi-eye me-1"></i>এখন পর্যালোচনা করুন
                         </a>
                     </div>
                 </div>
@@ -45,10 +45,10 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start mb-3">
                         <div>
-                            <h6 class="text-muted mb-1">Approved</h6>
+                            <h6 class="text-muted mb-1">অনুমোদিত</h6>
                             <h2 class="fw-bold text-success" th:text="${approvedBids}">0</h2>
                             <small class="text-muted" th:if="${totalBids > 0}">
-                                <span th:text="${(approvedBids/totalBids*100).intValue()}">0</span>% approval rate
+                                <span th:text="${(approvedBids/totalBids*100).intValue()}">0</span>% অনুমোদনের হার
                             </small>
                         </div>
                         <div class="bg-success bg-opacity-10 p-3 rounded">
@@ -57,7 +57,7 @@
                     </div>
                     <div class="d-grid">
                         <a th:href="@{/approver/bids?status=APPROVED}" class="btn btn-outline-success btn-sm">
-                            <i class="bi bi-list-check me-1"></i>View Approved
+                            <i class="bi bi-list-check me-1"></i>অনুমোদিত দেখুন
                         </a>
                     </div>
                 </div>
@@ -69,9 +69,9 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start mb-3">
                         <div>
-                            <h6 class="text-muted mb-1">Total Applications</h6>
+                            <h6 class="text-muted mb-1">মোট আবেদন</h6>
                             <h2 class="fw-bold" th:text="${totalBids}">0</h2>
-                            <small class="text-muted">All time submissions</small>
+                            <small class="text-muted">মোট জমা দেওয়া আবেদনের সংখ্যা</small>
                         </div>
                         <div class="bg-primary bg-opacity-10 p-3 rounded">
                             <i class="bi bi-file-earmark-text fs-3 text-primary"></i>
@@ -79,7 +79,7 @@
                     </div>
                     <div class="d-grid">
                         <a th:href="@{/approver/bids}" class="btn btn-outline-primary btn-sm">
-                            <i class="bi bi-folder2-open me-1"></i>View All
+                            <i class="bi bi-folder2-open me-1"></i>সব দেখুন
                         </a>
                     </div>
                 </div>
@@ -87,21 +87,20 @@
         </div>
     </div>
 
-    <!-- Quick Stats & Actions -->
+    <!-- Recent Applications Table -->
     <div class="row g-4 mb-4">
-        <!-- Recent Activity -->
         <div class="col-lg-8">
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center">
                     <h5 class="mb-0 fw-semibold">
-                        <i class="bi bi-activity me-2 text-primary"></i>Recent Applications
+                        <i class="bi bi-activity me-2 text-primary"></i>সাম্প্রতিক আবেদনসমূহ
                     </h5>
                     <div class="btn-group btn-group-sm" role="group">
                         <a th:href="@{/approver/bids}" class="btn btn-outline-primary">
-                            <i class="bi bi-list"></i> All Bids
+                            <i class="bi bi-list"></i> সব আবেদন
                         </a>
                         <a th:href="@{/approver/bids?status=SUBMITTED}" class="btn btn-outline-warning">
-                            <i class="bi bi-clock"></i> Pending
+                            <i class="bi bi-clock"></i> অপেক্ষমাণ
                         </a>
                     </div>
                 </div>
@@ -110,15 +109,15 @@
                         <table class="table table-hover mb-0">
                             <thead class="table-light">
                                 <tr>
-                                    <th class="ps-4">Application</th>
-                                    <th>Applicant</th>
-                                    <th>Status</th>
-                                    <th>Submitted</th>
-                                    <th class="text-end pe-4">Actions</th>
+                                    <th class="ps-4">আবেদন</th>
+                                    <th>আবেদনকারী</th>
+                                    <th>অবস্থা</th>
+                                    <th>জমা দেওয়া হয়েছে</th>
+                                    <th class="text-end pe-4">কর্ম</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr th:each="bid : ${recentBids}" class="hover-highlight">
+                                <tr th:each="bid : ${allBids}" class="hover-highlight">
                                     <td class="ps-4">
                                         <div class="d-flex align-items-center">
                                             <div class="bg-light p-2 rounded me-3">
@@ -127,7 +126,7 @@
                                             <div>
                                                 <h6 class="mb-0 fw-semibold">BID-<span th:text="${bid.id}"></span></h6>
                                                 <small class="text-muted">
-                                                    <span th:text="${bid.shopBids != null ? bid.shopBids.size() : 0}"></span> shops
+                                                    <span th:text="${bid.shopBids != null ? bid.shopBids.size() : 0}"></span> দোকান
                                                 </small>
                                             </div>
                                         </div>
@@ -142,18 +141,18 @@
                                         <span th:switch="${bid.status}">
                                             <span th:case="'SUBMITTED'" 
                                                   class="badge bg-warning bg-opacity-15 text-dark border border-warning border-opacity-25">
-                                                <i class="bi bi-clock me-1"></i> PENDING
+                                                <i class="bi bi-clock me-1"></i> অপেক্ষমান
                                             </span>
                                             <span th:case="'APPROVED'" 
                                                   class="badge bg-success bg-opacity-15 text-dark border border-success border-opacity-25">
-                                                <i class="bi bi-check-circle me-1"></i> APPROVED
+                                                <i class="bi bi-check-circle me-1"></i> অনুমোদিত
                                             </span>
                                             <span th:case="'REJECTED'" 
                                                   class="badge bg-danger bg-opacity-15 text-dark border border-danger border-opacity-25">
-                                                <i class="bi bi-x-circle me-1"></i> REJECTED
+                                                <i class="bi bi-x-circle me-1"></i> প্রত্যাখ্যাত
                                             </span>
                                             <span th:case="*" 
-                                                  class="badge bg-secondary bg-opacity-15 text-secondary border border-secondary border-opacity-25">
+                                                  class="badge bg-secondary bg-opacity-15 text-white border border-secondary border-opacity-25">
                                                 <i class="bi bi-dash-circle me-1"></i>
                                                 <span th:text="${bid.status}"></span>
                                             </span>
@@ -173,26 +172,24 @@
                                         <div class="btn-group btn-group-sm" role="group">
                                             <a th:href="@{/approver/tender/{id}(id=${bid.id})}" 
                                                class="btn btn-outline-primary"
-                                               title="Review Application">
+                                               title="আবেদন পর্যালোচনা করুন">
                                                 <i class="bi bi-eye"></i>
                                             </a>
                                             <a th:href="@{/approver/tender/{id}/report(id=${bid.id})}"
                                                target="_blank"
                                                class="btn btn-outline-info"
-                                               title="View Report">
+                                               title="প্রতিবেদন দেখুন">
                                                 <i class="bi bi-file-earmark-text"></i>
                                             </a>
                                         </div>
                                     </td>
                                 </tr>
-                                
-                                <!-- Empty State -->
                                 <tr th:if="${recentBids == null or #lists.isEmpty(recentBids)}">
                                     <td colspan="5" class="text-center py-5">
                                         <div class="py-4">
                                             <i class="bi bi-inbox fs-1 text-muted opacity-25"></i>
-                                            <h5 class="text-muted mt-3">No applications to review</h5>
-                                            <p class="text-muted mb-0">All applications have been processed</p>
+                                            <h5 class="text-muted mt-3">পর্যালোচনার জন্য কোন আবেদন নেই</h5>
+                                            <p class="text-muted mb-0">সব আবেদন প্রক্রিয়াকৃত হয়েছে</p>
                                         </div>
                                     </td>
                                 </tr>
@@ -208,7 +205,7 @@
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-header bg-white border-bottom">
                     <h5 class="mb-0 fw-semibold">
-                        <i class="bi bi-lightning-charge me-2 text-warning"></i>Quick Actions
+                        <i class="bi bi-lightning-charge me-2 text-warning"></i>দ্রুত কার্যাবলী
                     </h5>
                 </div>
                 <div class="card-body">
@@ -219,14 +216,13 @@
                                     <i class="bi bi-clock-history text-white"></i>
                                 </div>
                                 <div>
-                                    <h6 class="mb-0 fw-semibold text-white">Review Pending Applications</h6>
+                                    <h6 class="mb-0 fw-semibold text-white">পর্যালোচনার অপেক্ষমাণ আবেদন</h6>
                                     <small class="text-white text-opacity-75">
-                                        <span th:text="${pendingBids}">0</span> applications awaiting review
+                                        <span th:text="${pendingBids}">0</span> আবেদন অপেক্ষায়
                                     </small>
                                 </div>
                             </div>
                         </a>
-                        
                         <a th:href="@{/approver/bidders/report}" 
                            target="_blank"
                            class="btn btn-outline-primary text-start py-3">
@@ -235,12 +231,11 @@
                                     <i class="bi bi-printer text-primary"></i>
                                 </div>
                                 <div>
-                                    <h6 class="mb-0 fw-semibold">Generate Full Report</h6>
-                                    <small class="text-muted">All bidders with details</small>
+                                    <h6 class="mb-0 fw-semibold">সম্পূর্ণ প্রতিবেদন তৈরি করুন</h6>
+                                    <small class="text-muted">সকল আবেদনকারীর বিস্তারিত</small>
                                 </div>
                             </div>
                         </a>
-                        
                         <a th:href="@{/approver/bids?sort=createdDate,desc}" 
                            class="btn btn-outline-info text-start py-3">
                             <div class="d-flex align-items-center">
@@ -248,12 +243,11 @@
                                     <i class="bi bi-sort-down text-info"></i>
                                 </div>
                                 <div>
-                                    <h6 class="mb-0 fw-semibold">Latest Applications</h6>
-                                    <small class="text-muted">Sort by submission date</small>
+                                    <h6 class="mb-0 fw-semibold">সাম্প্রতিক আবেদন</h6>
+                                    <small class="text-muted">জমা দেওয়ার তারিখ অনুযায়ী সাজান</small>
                                 </div>
                             </div>
                         </a>
-                        
                         <a th:href="@{/approver/shops/report}" 
                            target="_blank"
                            class="btn btn-outline-secondary text-start py-3">
@@ -262,8 +256,8 @@
                                     <i class="bi bi-shop text-secondary"></i>
                                 </div>
                                 <div>
-                                    <h6 class="mb-0 fw-semibold">Shop Allocation Report</h6>
-                                    <small class="text-muted">Shop-wise bid analysis</small>
+                                    <h6 class="mb-0 fw-semibold">দোকান বরাদ্দ প্রতিবেদন</h6>
+                                    <small class="text-muted">দোকান অনুযায়ী বিশ্লেষণ</small>
                                 </div>
                             </div>
                         </a>
@@ -272,63 +266,4 @@
             </div>
         </div>
     </div>
-
-    
 </div>
-
-<style>
-.hover-lift {
-    transition: all 0.3s ease;
-}
-
-.hover-lift:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
-}
-
-.hover-highlight:hover {
-    background-color: rgba(13, 110, 253, 0.02) !important;
-}
-
-.chart-container {
-    position: relative;
-}
-
-.chart-bar {
-    position: relative;
-    height: 100%;
-}
-
-.chart-bar .progress {
-    background-color: #f8f9fa;
-    border-radius: 4px;
-    overflow: hidden;
-}
-
-.chart-bar .progress-bar {
-    border-radius: 4px;
-}
-
-.card {
-    border-radius: 0.75rem;
-}
-
-.table th {
-    font-weight: 600;
-    color: #495057;
-    border-bottom-width: 2px;
-}
-
-.badge {
-    padding: 0.35em 0.65em;
-    font-weight: 500;
-}
-
-.btn-group-sm .btn {
-    padding: 0.25rem 0.5rem;
-}
-
-.list-group-item {
-    padding: 0.5rem 0;
-}
-</style>

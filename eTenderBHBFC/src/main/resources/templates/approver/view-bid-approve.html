@@ -6,23 +6,23 @@
             <div class="d-flex justify-content-between align-items-center">
                 <div>
                     <h4 class="mb-1 fw-bold text-primary">
-                        <i class="bi bi-file-earmark-text me-2"></i>Tender Application Details
+                        <i class="bi bi-file-earmark-text me-2"></i>টেন্ডার আবেদন বিবরণ
                     </h4>
                     <small class="text-muted">
-                        <i class="bi bi-tag me-1"></i>Application ID: <strong th:text="${bid.id}"></strong>
-                        • Submitted on: <span th:text="${#temporals.format(bid.createdDate,'dd MMM yyyy')}"></span>
+                        <i class="bi bi-tag me-1"></i>আবেদনের আইডি: <strong th:text="${bid.id}"></strong>
+                        • জমা দেওয়া হয়েছে: <span th:text="${#temporals.format(bid.createdDate,'dd MMM yyyy')}"></span>
                     </small>
                 </div>
                 <div>
                     <span th:switch="${bid.status}">
                         <span th:case="'PENDING'" class="badge bg-warning bg-opacity-15 text-warning border border-warning border-opacity-25 px-3 py-2">
-                            <i class="bi bi-clock-history me-1"></i> PENDING REVIEW
+                            <i class="bi bi-clock-history me-1"></i> রিভিউ অপেক্ষমান
                         </span>
                         <span th:case="'APPROVED'" class="badge bg-success bg-opacity-15 text-success border border-success border-opacity-25 px-3 py-2">
-                            <i class="bi bi-check-circle me-1"></i> APPROVED
+                            <i class="bi bi-check-circle me-1"></i> অনুমোদিত
                         </span>
                         <span th:case="'REJECTED'" class="badge bg-danger bg-opacity-15 text-danger border border-danger border-opacity-25 px-3 py-2">
-                            <i class="bi bi-x-circle me-1"></i> REJECTED
+                            <i class="bi bi-x-circle me-1"></i> প্রত্যাখ্যাত
                         </span>
                         <span th:case="*" class="badge bg-primary bg-opacity-15 text-primary border border-primary border-opacity-25 px-3 py-2">
                             <i class="bi bi-dash-circle me-1"></i> <span th:text="${bid.status}"></span>
@@ -33,110 +33,58 @@
         </div>
     </div>
 
-    <!-- Application Overview -->
-    <div class="row mb-4">
-        <div class="col-lg-8">
-            <!-- Bidder Information -->
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-header bg-white border-bottom">
-                    <h5 class="mb-0 fw-semibold">
-                        <i class="bi bi-person-badge me-2 text-primary"></i>Applicant Information
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <!-- Applicant Info Items -->
-                        <div class="col-md-6 mb-3">
-                            <div class="info-item">
-                                <small class="text-muted d-block">Full Name</small>
-                                <div class="fw-semibold" th:text="${bid.user.name}"></div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <div class="info-item">
-                                <small class="text-muted d-block">Email Address</small>
-                                <div class="fw-semibold" th:text="${bid.user.username}"></div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <div class="info-item">
-                                <small class="text-muted d-block">Phone Number</small>
-                                <div class="fw-semibold" th:text="${bid.user.phone}"></div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <div class="info-item">
-                                <small class="text-muted d-block">NID Number</small>
-                                <div class="fw-semibold" th:text="${bid.user.nidNumber} ?: 'Not provided'"></div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <div class="info-item">
-                                <small class="text-muted d-block">Business Name</small>
-                                <div class="fw-semibold" th:text="${bid.user.businessName} ?: 'Not provided'"></div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <div class="info-item">
-                                <small class="text-muted d-block">Trade License</small>
-                                <div class="fw-semibold" th:text="${bid.user.tradeLicenseNo} ?: 'Not provided'"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <!-- Applicant Information Table -->
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-white border-bottom">
+            <h5 class="mb-0 fw-semibold"><i class="bi bi-person-badge me-2 text-primary"></i>আবেদনকারী তথ্য</h5>
         </div>
-
-        <div class="col-lg-4">
-            <!-- Quick Stats -->
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-header bg-white border-bottom">
-                    <h5 class="mb-0 fw-semibold">
-                        <i class="bi bi-graph-up me-2 text-primary"></i>Application Summary
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="bg-primary bg-opacity-10 p-3 rounded me-3">
-                            <i class="bi bi-shop fs-4 text-primary"></i>
-                        </div>
-                        <div>
-                            <h3 class="mb-0 fw-bold" th:text="${bid.shopBids != null ? bid.shopBids.size() : 0}">0</h3>
-                            <small class="text-muted">Shops Applied</small>
-                        </div>
-                    </div>
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="bg-info bg-opacity-10 p-3 rounded me-3">
-                            <i class="bi bi-file-earmark fs-4 text-info"></i>
-                        </div>
-                        <div>
-                            <h3 class="mb-0 fw-bold" th:text="${bid.attachments != null ? bid.attachments.size() : 0}">0</h3>
-                            <small class="text-muted">Documents Submitted</small>
-                        </div>
-                    </div>
-                    <div class="d-flex align-items-center">
-                        <div class="bg-warning bg-opacity-10 p-3 rounded me-3">
-                            <i class="bi bi-calendar-event fs-4 text-warning"></i>
-                        </div>
-                        <div>
-                            <h6 class="mb-0 fw-bold" th:text="${#temporals.format(bid.createdDate,'dd MMM yyyy')}"></h6>
-                            <small class="text-muted">Submission Date</small>
-                        </div>
-                    </div>
-                </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-bordered mb-0">
+                    <tbody>
+                        <tr>
+                            <th>পূর্ণ নাম</th>
+                            <td th:text="${bid.user.name}"></td>
+                            <th>ইমেইল</th>
+                            <td th:text="${bid.user.username}"></td>
+                        </tr>
+                        <tr>
+                            <th>মোবাইল নম্বর</th>
+                            <td th:text="${bid.user.phone}"></td>
+                            <th>জাতীয় পরিচয়পত্র (NID)</th>
+                            <td th:text="${bid.user.nidNumber} ?: 'প্রদত্ত নেই'"></td>
+                        </tr>
+                        <tr>
+                            <th>ব্যবসায়িক নাম</th>
+                            <td th:text="${bid.user.businessName} ?: 'প্রদত্ত নেই'"></td>
+                            <th>ট্রেড লাইসেন্স</th>
+                            <td th:text="${bid.user.tradeLicenseNo} ?: 'প্রদত্ত নেই'"></td>
+                        </tr>
+                        <tr>
+                            <th>জাতীয়তা</th>
+                            <td th:text="${bid.user.nationality}"></td>
+                            <th>ধর্ম</th>
+                            <td th:text="${bid.user.religion}"></td>
+                        </tr>
+                        <tr>
+                            <th>বর্তমান ঠিকানা</th>
+                            <td th:text="${bid.user.presentAddress}"></td>
+                            <th>স্থায়ী ঠিকানা</th>
+                            <td th:text="${bid.user.permanentAddress}"></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 
-    <!-- Shop Bid Details -->
+    <!-- Shop Applications Table -->
     <div class="card border-0 shadow-sm mb-4">
         <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center">
-            <h5 class="mb-0 fw-semibold">
-                <i class="bi bi-shop-window me-2 text-primary"></i>Shop Applications
-            </h5>
+            <h5 class="mb-0 fw-semibold"><i class="bi bi-shop-window me-2 text-primary"></i>দোকান আবেদনসমূহ</h5>
             <span class="badge bg-light text-dark">
                 <i class="bi bi-grid-3x3-gap me-1"></i>
-                <span th:text="${bid.shopBids != null ? bid.shopBids.size() : 0}">0</span> shops
+                <span th:text="${bid.shopBids != null ? bid.shopBids.size() : 0}">0</span> টি দোকান
             </span>
         </div>
         <div class="card-body p-0">
@@ -144,57 +92,39 @@
                 <table class="table table-hover mb-0">
                     <thead class="table-light">
                         <tr>
-                            <th class="ps-4">Shop Details</th>
-                            <th>Area (sqft)</th>
-                            <th>Financial Terms</th>
-                            <th class="text-end pe-4">Total Annual Rent</th>
+                            <th>দোকানের তথ্য</th>
+                            <th>ফ্লোরের এলাকা (sqft)</th>
+                            <th>আর্থিক শর্তাবলী</th>
+                            <th class="text-end">সাপ্তাহিক বা বার্ষিক ভাড়া</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr th:each="sb, i : ${bid.shopBids}" th:classappend="${i.odd} ? 'table-light' : ''">
-                            <td class="ps-4">
-                                <div class="d-flex align-items-center">
-                                    <div class="bg-light p-2 rounded me-3">
-                                        <i class="bi bi-building text-primary"></i>
-                                    </div>
-                                    <div>
-                                        <h6 class="mb-0 fw-semibold">Shop #<span th:text="${sb.shop.number}"></span></h6>
-                                        <small class="text-muted" th:text="${sb.shop.location}"></small>
-                                    </div>
+                            <td>
+                                <div>
+                                    <h6 class="mb-0 fw-semibold">দোকান #<span th:text="${sb.shop.number}"></span></h6>
+                                    <small class="text-muted" th:text="${sb.shop.location}"></small>
                                 </div>
                             </td>
                             <td>
-                                <div class="mb-1">
-                                    <small class="text-muted d-block">Main Floor</small>
-                                    <span class="fw-semibold" th:text="${sb.shop.areaMainFloor}"></span> sqft
-                                </div>
-                                <div>
-                                    <small class="text-muted d-block">Mezzanine</small>
-                                    <span class="fw-semibold" th:text="${sb.shop.areaMezzanineFloor}"></span> sqft
-                                </div>
+                                <div><small>প্রধান ফ্লোর:</small> <span th:text="${sb.shop.areaMainFloor}"></span> sqft</div>
+                                <div><small>মিজানাইন:</small> <span th:text="${sb.shop.areaMezzanineFloor}"></span> sqft</div>
                             </td>
                             <td>
-                                <div class="mb-1">
-                                    <small class="text-muted d-block">Rent per sqft</small>
-                                    <span class="fw-semibold" th:text="${'$' + sb.rentAmount}"></span>
-                                </div>
-                                <div>
-                                    <small class="text-muted d-block">Security Deposit</small>
-                                    <span class="fw-semibold" th:text="${'$' + sb.securityAmount}"></span>
-                                </div>
+                                <div><small>ভাড়া প্রতি sqft:</small> <span th:text="${'$' + sb.rentAmount}"></span></div>
+                                <div><small>সিকিউরিটি ডিপোজিট:</small> <span th:text="${'$' + sb.securityAmount}"></span></div>
                             </td>
-                            <td class="text-end pe-4">
+                            <td class="text-end">
                                 <h6 class="mb-0 fw-bold text-primary">
                                     <span th:text="${'$' + (sb.shop.areaMainFloor + sb.shop.areaMezzanineFloor) * sb.rentAmount}"></span>
                                 </h6>
-                                <small class="text-muted">per year</small>
+                                <small class="text-muted">প্রতি বছর</small>
                             </td>
                         </tr>
-
                         <tr th:if="${bid.shopBids == null or bid.shopBids.isEmpty()}">
                             <td colspan="4" class="text-center py-5">
                                 <i class="bi bi-shop fs-1 text-muted opacity-25"></i>
-                                <h5 class="text-muted mt-3">No shop applications</h5>
+                                <h5 class="text-muted mt-3">কোনও দোকান আবেদন নেই</h5>
                             </td>
                         </tr>
                     </tbody>
@@ -203,121 +133,63 @@
         </div>
     </div>
 
-    <!-- Submitted Documents (List View) -->
+    <!-- Submitted Documents Table -->
     <div class="card border-0 shadow-sm mb-4">
         <div class="card-header bg-white border-bottom d-flex justify-content-between align-items-center">
-            <h5 class="mb-0 fw-semibold">
-                <i class="bi bi-paperclip me-2 text-primary"></i>Submitted Documents
-            </h5>
+            <h5 class="mb-0 fw-semibold"><i class="bi bi-paperclip me-2 text-primary"></i>জমা দেওয়া দলিলসমূহ</h5>
             <span class="badge bg-light text-dark">
                 <i class="bi bi-file-earmark me-1"></i>
-                <span th:text="${bid.attachments != null ? bid.attachments.size() : 0}">0</span> files
+                <span th:text="${bid.attachments != null ? bid.attachments.size() : 0}">0</span> ফাইল
             </span>
         </div>
-        <div class="card-body">
-            <ul class="list-group list-group-flush">
-                <li th:each="att : ${bid.attachments}" class="list-group-item d-flex justify-content-between align-items-center">
-                    <div>
-                        <i class="bi bi-file-earmark-text me-2 text-primary"></i>
-                        <span th:text="${att.name}"></span>
-                        <small class="text-muted ms-2" th:text="${att.type}"></small>
-                    </div>
-                    <a th:href="@{/attachments/download/{id}(id=${att.id})}" class="btn btn-sm btn-outline-primary">
-                        <i class="bi bi-download me-1"></i>Download
-                    </a>
-                </li>
-                <li th:if="${bid.attachments == null or bid.attachments.isEmpty()}" class="list-group-item text-center text-muted">
-                    <i class="bi bi-folder-x fs-3 opacity-25"></i>
-                    <div>No documents uploaded</div>
-                </li>
-            </ul>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>দলিলের নাম</th>
+                            <th>ধরন</th>
+                            <th>ডাউনলোড</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="att : ${bid.attachments}">
+                            <td><i class="bi bi-file-earmark-text me-2 text-primary"></i><span th:text="${att.name}"></span></td>
+                            <td th:text="${att.type}"></td>
+                            <td>
+                                <a th:href="@{/attachments/download/{id}(id=${att.id})}" class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-download me-1"></i>ডাউনলোড
+                                </a>
+                            </td>
+                        </tr>
+                        <tr th:if="${bid.attachments == null or bid.attachments.isEmpty()}">
+                            <td colspan="3" class="text-center text-muted py-4">
+                                <i class="bi bi-folder-x fs-2 opacity-25"></i>
+                                <div>কোনও দলিল আপলোড করা হয়নি</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
     <!-- Action Buttons -->
     <div class="d-flex justify-content-between align-items-center mt-4">
-       
-
         <div class="d-flex gap-2">
             <button onclick="window.print()" class="btn btn-outline-dark">
-                <i class="bi bi-printer me-1"></i>Print Application
+                <i class="bi bi-printer me-1"></i>আবেদন মুদ্রণ
             </button>
-            
-           
-			<!-- Approve Tender Button with Confirmation Modal -->
-			<button type="button" class="btn btn-danger" th:if="${bid.status == 'SUBMITTED'}" data-bs-toggle="modal" data-bs-target="#rejectModal">
-			    <i class="bi bi-x-circle me-1"></i>Reject Bidder
-			</button>
-            <!-- Approve Tender Button with Confirmation Modal -->
+
+            <!-- Reject Button -->
+            <button type="button" class="btn btn-danger" th:if="${bid.status == 'SUBMITTED'}" data-bs-toggle="modal" data-bs-target="#rejectModal">
+                <i class="bi bi-x-circle me-1"></i>প্রত্যাখ্যান করুন
+            </button>
+
+            <!-- Approve Button -->
             <button type="button" class="btn btn-success" th:if="${bid.status == 'SUBMITTED'}" data-bs-toggle="modal" data-bs-target="#approveModal">
-                <i class="bi bi-check-circle me-1"></i>Approve Bidder
+                <i class="bi bi-check-circle me-1"></i>অনুমোদন করুন
             </button>
         </div>
     </div>
 </div>
-<div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="rejectModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title text-danger" id="rejectModalLabel">
-                    <i class="bi bi-exclamation-triangle me-1"></i>Confirm Rejection
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                Are you sure you want to <strong>reject this bidder</strong>? This action cannot be undone.
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-                <form th:action="@{/approver/tender/{id}/reject(id=${bid.id})}" method="post">
-                    <button type="submit" class="btn btn-danger">Yes, Reject</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- APPROVE CONFIRMATION MODAL -->
-<div class="modal fade" id="approveModal" tabindex="-1" aria-labelledby="approveModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-0 shadow-sm">
-            <div class="modal-header bg-success bg-opacity-15">
-                <h5 class="modal-title fw-bold" id="approveModalLabel">
-                    <i class="bi bi-check-circle me-2"></i>Confirm Approval
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                Are you sure you want to approve this tender application?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
-                <form th:action="@{/approver/tender/{id}/approve(id=${bid.id})}" method="post">
-                    <button type="submit" class="btn btn-success">Yes, Approve</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<style>
-.info-item { padding: 0.5rem 0; border-bottom: 1px solid #f0f0f0; }
-.info-item:last-child { border-bottom: none; }
-
-.table th { font-weight: 600; color: #495057; border-bottom: 2px solid #dee2e6; }
-.table td { vertical-align: middle; }
-
-.card { border-radius: 0.75rem; }
-.card-header { border-radius: 0.75rem 0.75rem 0 0 !important; }
-
-.badge { font-weight: 500; letter-spacing: 0.5px; }
-.table-active { background-color: rgba(13, 110, 253, 0.05) !important; }
-
-.btn-outline-primary:hover { background-color: #0d6efd; color: white; }
-
-.list-group-item i { font-size: 1.2rem; vertical-align: middle; }
-
-@media print {
-    .btn, .badge { display: none !important; }
-    .card { box-shadow: none !important; border: 1px solid #dee2e6 !important; }
-}
-</style>

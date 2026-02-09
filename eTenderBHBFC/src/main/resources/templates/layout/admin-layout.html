@@ -629,11 +629,7 @@
               <i class="bi bi-gear"></i>
             </button>
             <ul class="dropdown-menu dropdown-menu-end shadow">
-              <li><a class="dropdown-item" th:href="@{/approver/profile}"><i class="bi bi-person-circle me-2"></i> My Profile</a></li>
-              <li><a class="dropdown-item" href="#"><i class="bi bi-bell me-2"></i> Notifications <span class="badge bg-danger">5</span></a></li>
-              <li><a class="dropdown-item" th:href="@{/approver/settings}"><i class="bi bi-gear me-2"></i> Settings</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="#"><i class="bi bi-shield-check me-2"></i> Audit Log</a></li>
+    
               <li><hr class="dropdown-divider"></li>
               <li>
                 <a class="dropdown-item text-danger" href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">
@@ -664,11 +660,11 @@
           <span class="module-text">Approval Portal</span>
         </a>
       </div>
-      
+      <!--
       <div class="sidebar-accordion">
         <div class="accordion" id="sidebarMenu">
                    
-          <!-- BIDDER MANAGEMENT -->
+           BIDDER MANAGEMENT 
           <div class="accordion-item">
             <h2 class="accordion-header">
               <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#bidderModule">
@@ -691,39 +687,10 @@
 
          
 
-          <!-- SYSTEM SETTINGS -->
-          <div class="accordion-item">
-            <h2 class="accordion-header">
-              <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#settingsModule">
-                <i class="fas fa-cog module-icon"></i>
-                <span class="module-text">⚙️ System Settings</span>
-              </button>
-            </h2>
-            <div id="settingsModule" class="accordion-collapse collapse">
-              <div class="accordion-body">
-                <a class="nav-link" th:href="@{/approver/system-settings}">
-                  <i class="fas fa-sliders-h"></i>
-                  <span>General Settings</span>
-                </a>
-                <a class="nav-link" th:href="@{/approver/user-management}">
-                  <i class="fas fa-user-cog"></i>
-                  <span>User Management</span>
-                </a>
-                <a class="nav-link" th:href="@{/approver/role-management}">
-                  <i class="fas fa-user-shield"></i>
-                  <span>Role Management</span>
-                </a>
-                <a class="nav-link" th:href="@{/approver/audit-log}">
-                  <i class="fas fa-clipboard-list"></i>
-                  <span>Audit Logs</span>
-                </a>
-              </div>
-            </div>
-          </div>
 
         </div>
       </div>
-      
+      -->
       <div class="sidebar-footer">
         <div class="module-text">Version 3.1</div>
         <small class="module-text">© 2026 BHFC - Admin</small>

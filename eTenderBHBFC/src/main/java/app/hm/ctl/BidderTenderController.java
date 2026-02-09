@@ -2,6 +2,8 @@ package app.hm.ctl;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -104,20 +107,19 @@ public class BidderTenderController {
     // Step 1: show form for bidder info + shop selection
     @GetMapping("/apply-tender-step1")
     public String showTenderStep1(Model model, Authentication auth) {
-    	
-    	User user=userRepository.findByUsername(auth.getName()).get();
         TenderBid tenderBid = new TenderBid();
+
+        // Initialize user to avoid Thymeleaf null error
+        User user = userRepository.findByUsername(auth.getName()).orElseThrow();
         tenderBid.setUser(user);
-        // Prepare 2 empty ShopBids
-        List<ShopBid> shopBids = new ArrayList<>();
-        for(int i = 0; i < 2; i++) shopBids.add(new ShopBid());
-        tenderBid.setShopBids(shopBids);
 
         model.addAttribute("tenderBid", tenderBid);
         model.addAttribute("shops", shopRepository.findAll());
         model.addAttribute("content", "tender/apply-tender-step1");
+
         return layoutUtils.getLayout(auth);
     }
+
 
 	
     
@@ -157,6 +159,7 @@ public class BidderTenderController {
         // ---------- IF ERROR → BACK TO STEP-1 ----------
         if (!errors.isEmpty()) {
             model.addAttribute("errorMessages", errors);
+            tenderBid.setUser(user);
             model.addAttribute("tenderBid", tenderBid);
             model.addAttribute("shops", shopRepository.findAll());
             model.addAttribute("content", "tender/apply-tender-step1");
@@ -269,5 +272,54 @@ public class BidderTenderController {
 
         return "redirect:/bidder/active-tenders";
     }
+    
+    @PostMapping("/apply-tender-step2/upload-single")
+    @Transactional
+    @ResponseBody
+    public ResponseEntity<?> uploadSingleFile(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("name") String name,
+            @RequestParam("type") String type,
+            @RequestParam("tenderId") Long tenderId
+    ) {
+        TenderBid bid = tenderBidRepository.findById(tenderId).orElse(null);
+        if (bid == null) return ResponseEntity.badRequest().body("Tender not found");
+
+        try {
+            String baseDir = "uploads/tender/" + bid.getId() + "/";
+            Path uploadPath = Paths.get(baseDir);
+            Files.createDirectories(uploadPath);
+
+            String safeFileName = "att_" + System.currentTimeMillis() + "_" + file.getOriginalFilename();
+            Path filePath = uploadPath.resolve(safeFileName);
+            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+            Attachment att = new Attachment();
+            att.setName(name);
+            att.setType(type);
+            att.setFilePath(baseDir + safeFileName);
+            att.setTenderBid(bid);
+
+            bid.getAttachments().add(att);
+            tenderBidRepository.save(bid);
+
+            return ResponseEntity.ok("Uploaded");
+
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Upload failed");
+        }
+    }
+    @PostMapping("/apply-tender-step2/complete/{id}")
+    @Transactional
+    public ResponseEntity<String> completeTender(@PathVariable("id") Long id) {
+        TenderBid bid = tenderBidRepository.findById(id).orElse(null);
+        if (bid == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tender not found");
+
+        bid.setStatus("SUBMITTED");
+        tenderBidRepository.save(bid);
+
+        return ResponseEntity.ok("Tender marked as submitted");
+    }
+
 
 }

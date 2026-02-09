@@ -702,30 +702,10 @@
             </ul>
             
             <div class="nav-actions">
-                <!-- Logged In User -->
-                <div th:if="${#authorization.expression('isAuthenticated()')}" class="dropdown">
-                    <div class="user-dropdown dropdown-toggle" data-bs-toggle="dropdown">
-                        <div class="user-avatar">
-                            <span th:text="${#strings.substring(#authentication.principal.username,0,1)}">U</span>
-                        </div>
-                        <div class="user-info d-none d-md-block">
-                            <div class="user-name" th:text="${#authentication.principal.username}">User</div>
-                            <div class="user-role">দরদাতা</div>
-                        </div>
-                    </div>
-                    <ul class="dropdown-menu dropdown-menu-end shadow">
-                        <li><a class="dropdown-item" th:href="@{/bidder/dashboard}"><i class="fas fa-tachometer-alt me-2"></i>ড্যাশবোর্ড</a></li>
-                        <li><a class="dropdown-item" href="#"><i class="fas fa-user-circle me-2"></i>প্রোফাইল</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li>
-                            <form th:action="@{/logout}" method="post">
-                                <button class="dropdown-item text-danger">
-                                    <i class="fas fa-sign-out-alt me-2"></i>লগআউট
-                                </button>
-                            </form>
-                        </li>
-                    </ul>
-                </div>
+				<a class="btn-register" th:href="@{/register}">
+				                       <i class="fas fa-user-plus"></i>
+				                       <span>নিবন্ধন</span>
+				                   </a>
                 
                 <!-- Not Logged In -->
                 <div th:if="${#authorization.expression('!isAuthenticated()')}">
@@ -733,10 +713,7 @@
                         <i class="fas fa-sign-in-alt"></i>
                         <span>লগইন</span>
                     </a>
-                    <a class="btn-register" th:href="@{/register}">
-                        <i class="fas fa-user-plus"></i>
-                        <span>নিবন্ধন</span>
-                    </a>
+                   
                 </div>
             </div>
         </div>
@@ -793,58 +770,7 @@
         </section>
 
         <!-- Features Section -->
-        <section id="features" class="features-section">
-            <div class="section-container">
-                <div class="section-header">
-                    <h2 class="section-title">সিস্টেমের বৈশিষ্ট্য</h2>
-                    <p class="section-subtitle">
-                        আধুনিক প্রযুক্তি ব্যবহার করে গড়ে তোলা একটি সম্পূর্ণ ডিজিটাল টেন্ডার ব্যবস্থাপনা প্ল্যাটফর্ম
-                    </p>
-                </div>
-                
-                <div class="features-grid">
-                    <div class="feature-card fade-in">
-                        <div class="feature-icon">
-                            <i class="fas fa-shield-alt"></i>
-                        </div>
-                        <h3 class="feature-title">সর্বোচ্চ নিরাপত্তা</h3>
-                        <p class="feature-description">
-                            এনক্রিপ্টেড ডাটা ট্রান্সমিশন, দুই-ফ্যাক্টর অথেন্টিকেশন এবং নিরাপদ সার্ভার ব্যবস্থা।
-                        </p>
-                    </div>
-                    
-                    <div class="feature-card fade-in">
-                        <div class="feature-icon">
-                            <i class="fas fa-bolt"></i>
-                        </div>
-                        <h3 class="feature-title">দ্রুত প্রক্রিয়াকরণ</h3>
-                        <p class="feature-description">
-                            স্বয়ংক্রিয় দরপত্র মূল্যায়ন এবং দ্রুত ফলাফল প্রকাশের ব্যবস্থা।
-                        </p>
-                    </div>
-                    
-                    <div class="feature-card fade-in">
-                        <div class="feature-icon">
-                            <i class="fas fa-mobile-alt"></i>
-                        </div>
-                        <h3 class="feature-title">মোবাইল ফ্রেন্ডলি</h3>
-                        <p class="feature-description">
-                            যেকোনো ডিভাইস থেকে অ্যাক্সেস করুন। রেসপন্সিভ ডিজাইন সকল স্ক্রিন সাইজের জন্য উপযুক্ত।
-                        </p>
-                    </div>
-                    
-                    <div class="feature-card fade-in">
-                        <div class="feature-icon">
-                            <i class="fas fa-chart-line"></i>
-                        </div>
-                        <h3 class="feature-title">রিয়েল-টাইম ট্র্যাকিং</h3>
-                        <p class="feature-description">
-                            দরপত্রের বর্তমান অবস্থা, আপডেট এবং নোটিফিকেশন রিয়েল-টাইমে দেখুন।
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
+        
 
         <!-- Tender Info Section -->
         <section class="tender-info-section" id="process">
@@ -931,73 +857,10 @@
 
     <!-- Footer -->
     <footer class="footer" id="contact">
-        <div class="footer-container">
-            <div class="footer-grid">
-                <div class="footer-column">
-                    <h5>BHBFC ই-টেন্ডার পোর্টাল</h5>
-                    <p>
-                        সরকারি দোকান ভাড়া সংক্রান্ত ই-টেন্ডার ব্যবস্থাপনার জন্য উন্নত প্রযুক্তি ভিত্তিক প্ল্যাটফর্ম।
-                        স্বচ্ছতা, নিরাপত্তা এবং দক্ষতার সাথে টেন্ডার প্রক্রিয়া পরিচালনা।
-                    </p>
-                    <div class="contact-info">
-                        <div class="contact-item">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <span>২২, পুরানা পল্টন, সদর দফতর, ঢাকা</span>
-                        </div>
-                        <div class="contact-item">
-                            <i class="fas fa-phone"></i>
-                            <span>+৮৮০২-XXXX-XXXX</span>
-                        </div>
-                        <div class="contact-item">
-                            <i class="fas fa-envelope"></i>
-                            <span>dgm.cs@bhbfc.gov.bd</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="footer-column">
-                    <h5>গুরুত্বপূর্ণ লিংক</h5>
-                    <ul class="footer-links">
-                        <li><a th:href="@{/login}"><i class="fas fa-sign-in-alt"></i>লগইন</a></li>
-                        <li><a th:href="@{/register}"><i class="fas fa-user-plus"></i>নতুন নিবন্ধন</a></li>
-                        <li><a href="#"><i class="fas fa-file-alt"></i>দরপত্রের শর্তাবলী</a></li>
-                        <li><a href="#"><i class="fas fa-question-circle"></i>সহায়তা কেন্দ্র</a></li>
-                        <li><a href="#"><i class="fas fa-download"></i>ফরম ডাউনলোড</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-column">
-                    <h5>কর্তৃপক্ষ সম্পর্কিত</h5>
-                    <ul class="footer-links">
-                        <li><a href="#"><i class="fas fa-building"></i>বিএইচবিএফসি সম্পর্কে</a></li>
-                        <li><a href="#"><i class="fas fa-gavel"></i>টেন্ডার নিয়মাবলী</a></li>
-                        <li><a href="#"><i class="fas fa-shield-alt"></i>গোপনীয়তা নীতি</a></li>
-                        <li><a href="#"><i class="fas fa-file-contract"></i>ব্যবহারের শর্তাবলী</a></li>
-                        <li><a href="#"><i class="fas fa-newspaper"></i>নোটিশ বোর্ড</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-column">
-                    <h5>সিস্টেম তথ্য</h5>
-                    <p>
-                        <strong>সংস্করণ:</strong> ২.০.১<br>
-                        <strong>সর্বশেষ হালনাগাদ:</strong> ডিসেম্বর ২০২৪<br>
-                        <strong>সাপোর্ট:</strong> ২৪/৭ টেকনিক্যাল সাপোর্ট<br>
-                        <strong>ব্রাউজার সমর্থন:</strong> Chrome, Firefox, Edge
-                    </p>
-                    <div class="mt-3">
-                        <small style="color: rgba(255,255,255,0.5);">
-                            © ২০২৪ বাংলাদেশ হাউজ বিল্ডিং ফাইনান্স কর্পোরেশন<br>
-                            সর্বস্বত্ব সংরক্ষিত
-                        </small>
-                    </div>
-                </div>
-            </div>
-            
+        <div class="footer-container">           
             <div class="footer-bottom">
                 <p>
-                    এই পোর্টালটি বাংলাদেশ সরকারের আইন-কানুন ও নীতিমালা অনুযায়ী পরিচালিত হয়।
-                    যেকোনো অসামঞ্জস্যতা বা সমস্যার জন্য অনুগ্রহ করে যোগাযোগ করুন।
+                    © 2026 BHFC | Tender Portal 
                 </p>
             </div>
         </div>
