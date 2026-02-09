@@ -2,8 +2,8 @@
     <!-- Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h2 class="fw-bold mb-1">আমার টেন্ডার ড্যাশবোর্ড</h2>
-            <p class="text-muted mb-0">আপনার সব টেন্ডার আবেদন ট্র্যাক এবং পরিচালনা করুন</p>
+            <h2 class="fw-bold mb-1">ড্যাশবোর্ড</h2>
+          <!--  <p class="text-muted mb-0">আপনার সব টেন্ডার আবেদন ট্র্যাক এবং পরিচালনা করুন</p>-->
         </div>
     </div>
 
@@ -13,7 +13,7 @@
             <div class="card border-0 shadow-sm h-100 hover-lift">
                 <div class="card-body">
 					<a th:href="@{/bidder/apply-tender-step1}" class="btn btn-primary">
-					            <i class="bi bi-plus-circle me-2"></i>নতুন টেন্ডারের জন্য আবেদন করুন
+					            <i class="bi bi-plus-circle me-2"></i>নতুন দোকান/অফিস ভাড়ার জন্য আবেদন করুন
 					        </a>
                 </div>
             </div>
@@ -23,7 +23,7 @@
             <div class="card border-0 shadow-sm h-100 hover-lift">
                 <div class="card-body">
 					<a th:href="@{/bidder/active-tenders}" class="btn btn-danger">
-							           <i class="bi bi-plus-circle me-2"></i>সক্রিয় টেন্ডার
+							           <i class="bi bi-plus-circle me-2"></i>ভাড়ার জন্য সক্রিয় দোকান/অফিস
 							       </a>
                 </div>
             </div>
@@ -48,8 +48,8 @@
                                     <i class="bi bi-search text-primary"></i>
                                 </div>
                                 <div>
-                                    <h6 class="mb-0 fw-semibold">প্রাপ্য টেন্ডার ব্রাউজ করুন</h6>
-                                    <small class="text-muted">নতুন সুযোগ খুঁজুন</small>
+                                    <h6 class="mb-0 fw-semibold">দোকান/অফিস ব্রাউজ করুন</h6>
+                                
                                 </div>
                             </div>
                         </a>
@@ -60,7 +60,7 @@
                                 </div>
                                 <div>
                                     <h6 class="mb-0 fw-semibold">সব আবেদন দেখুন</h6>
-                                    <small class="text-muted">পূর্ণ আবেদন ইতিহাস</small>
+                                   
                                 </div>
                             </div>
                         </a>
@@ -140,7 +140,7 @@
                                     <td class="text-end pe-4">
                                         <a th:href="@{/bidder/tender/{id}(id=${bid.id})}"
                                            class="btn btn-sm btn-outline-primary px-3">
-                                            <i class="bi bi-eye me-1"></i> দেখুন
+                                            <i class="bi bi-eye me-1"></i> আবেদন দেখুন
                                         </a>
 										<a th:href="@{/approver/tender/{id}/report(id=${bid.id})}"
 																									   target="_blank"
@@ -157,9 +157,9 @@
                                         <div class="py-4">
                                             <i class="bi bi-file-earmark-text fs-1 text-muted opacity-25"></i>
                                             <h5 class="text-muted mt-3">কোনো আবেদন নেই</h5>
-                                            <p class="text-muted mb-3">প্রাপ্য টেন্ডারে আবেদন করে শুরু করুন</p>
+                                            <p class="text-muted mb-3"> আবেদন করে শুরু করুন</p>
                                             <a th:href="@{/bidder/tenders}" class="btn btn-primary">
-                                                <i class="bi bi-plus-circle me-1"></i>টেন্ডার ব্রাউজ করুন
+                                                <i class="bi bi-plus-circle me-1"></i> ব্রাউজ করুন
                                             </a>
                                         </div>
                                     </td>

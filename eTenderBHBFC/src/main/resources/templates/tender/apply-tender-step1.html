@@ -7,7 +7,7 @@
             <div class="row g-2">
                 <div class="col-6 col-md-4"><strong>নাম:</strong> [[${tenderBid.user.name}]]</div>
                 <div class="col-6 col-md-4"><strong>ইমেইল:</strong> [[${tenderBid.user.username}]]</div>
-                <div class="col-6 col-md-4"><strong>ফোন:</strong> [[${tenderBid.user.phone}]]</div>
+                <div class="col-6 col-md-4"><strong>মোবাইল নাম্বার:</strong> [[${tenderBid.user.phone}]]</div>
 
                 <div class="col-6 col-md-4"><strong>পিতা/স্বামী:</strong> [[${tenderBid.user.fatherOrSpouseName}]]</div>
                 <div class="col-6 col-md-4"><strong>জাতীয়তা:</strong> [[${tenderBid.user.nationality}]]</div>
@@ -16,13 +16,13 @@
                 <div class="col-6 col-md-6"><strong>বর্তমান ঠিকানা:</strong> [[${tenderBid.user.presentAddress}]]</div>
                 <div class="col-6 col-md-6"><strong>স্থায়ী ঠিকানা:</strong> [[${tenderBid.user.permanentAddress}]]</div>
 
-                <div class="col-6 col-md-4"><strong>জাতীয় পরিচয়পত্র (NID):</strong> [[${tenderBid.user.nidNumber}]]</div>
+                <div class="col-6 col-md-4"><strong>জাতীয় পরিচয়পত্র (NID) নম্বর:</strong> [[${tenderBid.user.nidNumber}]]</div>
                 <div class="col-6 col-md-4"><strong>ব্যবসার নাম:</strong> [[${tenderBid.user.businessName}]]</div>
                 <div class="col-6 col-md-4"><strong>ব্যবসার ধরন:</strong> [[${tenderBid.user.businessType}]]</div>
 
-                <div class="col-6 col-md-4"><strong>ট্রেড লাইসেন্স নং:</strong> [[${tenderBid.user.tradeLicenseNo}]]</div>
-                <div class="col-6 col-md-4"><strong>লাইসেন্স নবায়ন:</strong> [[${tenderBid.user.tradeLicenseRenewalDate}]]</div>
-                <div class="col-6 col-md-4"><strong>টিন (TIN):</strong> [[${tenderBid.user.tinNumber}]]</div>
+                <div class="col-6 col-md-4"><strong>ট্রেড লাইসেন্স নম্বর:</strong> [[${tenderBid.user.tradeLicenseNo}]]</div>
+                <div class="col-6 col-md-4"><strong>লাইসেন্স নবায়নের তারিখ:</strong> [[${tenderBid.user.tradeLicenseRenewalDate}]]</div>
+                <div class="col-6 col-md-4"><strong>টিন (TIN) নম্বর:</strong> [[${tenderBid.user.tinNumber}]]</div>
             </div>
         </div>
     </div>
@@ -30,10 +30,10 @@
     <!-- Shop Selection -->
     <div class="card mb-3">
         <div class="card-header bg-light py-2 d-flex justify-content-between align-items-center">
-            <h5 class="mb-0">দোকান নির্বাচন</h5>
+            <h5 class="mb-0">দোকান/অফিস নির্বাচন</h5>
             <div>
-                <span class="badge bg-info me-1">ন্যূনতম ১টি দোকান</span>
-                <span class="badge bg-primary">সর্বোচ্চ ২টি দোকান</span>
+                <span class="badge bg-info me-1">ন্যূনতম ১টি দোকান নির্বাচন করুন </span>
+                <span class="badge bg-primary">সর্বোচ্চ ২টি দোকান নির্বাচন করুন </span>
             </div>
         </div>
         <div class="card-body py-2">
@@ -44,10 +44,10 @@
                             <th class="text-center" style="width:50px;">নির্বাচন</th>
                             <th>দোকান</th>
                             <th>অবস্থান</th>
-                            <th>প্রধান (sqft)</th>
-                            <th>মেজ়ানাইন (sqft)</th>
-                            <th>মোট এলাকা</th>
-                            <th style="width:220px">আর্থিক</th>
+                            <th>মেইন ফ্লোর (বর্গফুট)</th>
+                            <th>মেজানিন  ফ্লোর (বর্গফুট)</th>
+                            <th>মোট আয়তন (বর্গফুট)</th>
+                            <th style="width:220px">প্রস্তাবিত ভাড়া ও জামানত </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -67,7 +67,7 @@
                                         <input type="number" class="form-control rent-input" step="0.01" min="0" placeholder="প্রতি sqft" data-shop-number="[[${shop.number}]]">
                                     </div>
                                     <div class="input-group input-group-sm">
-                                        <span class="input-group-text bg-warning text-dark">ডিপোজিট</span>
+                                        <span class="input-group-text bg-warning text-dark">জামানত</span>
                                         <input type="number" class="form-control security-input" step="0.01" min="0" placeholder="সিকিউরিটি" data-shop-number="[[${shop.number}]]">
                                     </div>
                                 </div>

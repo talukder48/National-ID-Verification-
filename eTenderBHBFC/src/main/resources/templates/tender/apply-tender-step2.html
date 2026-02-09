@@ -1,7 +1,7 @@
 <form id="uploadForm">
     <div class="card mb-4">
         <div class="card-header bg-light d-flex justify-content-between align-items-center">
-            <h4 class="mb-0">ধাপ ২: প্রয়োজনীয় দলিল আপলোড</h4>
+            <h4 class="mb-0">ধাপ ২: প্রয়োজনীয় দলিল আপলোড করুন</h4>
             <span class="badge bg-primary">৭টি দলিল আবশ্যক</span>
         </div>
         <div class="card-body">
@@ -11,14 +11,14 @@
 
                     <!-- Document Type Dropdown -->
                     <select name="attachmentTypes" class="form-select document-type" required onchange="validateForm()">
-                        <option value="" disabled selected>দলিলের ধরন নির্বাচন করুন...</option>
+                        <option value="" disabled selected>দলিলের ধরন নির্বাচন করুন</option>
                         <option value="ID_DOC">জাতীয় পরিচয়পত্র (NID)</option>
                         <option value="PHOTO">পাসপোর্ট সাইজ ছবি</option>
                         <option value="LICENSE">ট্রেড লাইসেন্স</option>
                         <option value="TAX_CERT">আয়কর সনদপত্র</option>
-                        <option value="VAT_DOC">ভ্যাট নিবন্ধন</option>
+                        <option value="VAT_DOC">ভ্যাট নিবন্ধন সনদ</option>
                         <option value="BANK_SOLVENCY">ব্যাংক সলভেন্সি সনদ</option>
-                        <option value="MEMO">স্মারক ও প্রবন্ধ</option>
+                        <option value="MEMO">স্মারক ও প্রবন্ধ সনদ</option>
                     </select>
 
                     <!-- File Input -->
@@ -41,7 +41,7 @@
         </div>
 
         <div class="card-footer text-end">
-            <button type="button" class="btn btn-success" id="upload-btn" disabled>সমস্ত আপলোড করুন</button>
+            <button type="button" class="btn btn-success" id="upload-btn" disabled>আপলোড করুন</button>
         </div>
     </div>
 </form>
@@ -147,13 +147,13 @@ async function uploadFiles() {
             method: "POST"
         });
 
-        if (!response.ok) throw new Error("টেন্ডার সম্পূর্ণ করতে ব্যর্থ হয়েছে");
+        if (!response.ok) throw new Error("আবেদন সম্পূর্ণ করতে ব্যর্থ হয়েছে");
 
         alert("সমস্ত দলিল সফলভাবে আপলোড হয়েছে!");
         window.location.href = "/dashboard";
 
     } catch (err) {
-        alert("টেন্ডার সম্পূর্ণ করতে ত্রুটি: " + err.message);
+        alert("আবেদন সম্পূর্ণ করতে ত্রুটি: " + err.message);
     }
 }
 
