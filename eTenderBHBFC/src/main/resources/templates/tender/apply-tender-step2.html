@@ -2,23 +2,28 @@
     <div class="card mb-4">
         <div class="card-header bg-light d-flex justify-content-between align-items-center">
             <h4 class="mb-0">ধাপ ২: প্রয়োজনীয় দলিল আপলোড করুন</h4>
-            <span class="badge bg-primary">৭টি দলিল আবশ্যক</span>
+            <span class="badge bg-primary">৯টি ডকুমেন্টস আবশ্যক</span>
         </div>
         <div class="card-body">
 
             <div id="documents-container">
-                <div th:each="i : ${#numbers.sequence(0,6)}" class="document-row mb-3 d-flex align-items-center gap-2 p-2 border rounded">
+                <div th:each="i : ${#numbers.sequence(0,8)}" class="document-row mb-3 d-flex align-items-center gap-2 p-2 border rounded">
 
                     <!-- Document Type Dropdown -->
                     <select name="attachmentTypes" class="form-select document-type" required onchange="validateForm()">
                         <option value="" disabled selected>দলিলের ধরন নির্বাচন করুন</option>
-                        <option value="ID_DOC">জাতীয় পরিচয়পত্র (NID)</option>
-                        <option value="PHOTO">পাসপোর্ট সাইজ ছবি</option>
-                        <option value="LICENSE">ট্রেড লাইসেন্স</option>
-                        <option value="TAX_CERT">আয়কর সনদপত্র</option>
-                        <option value="VAT_DOC">ভ্যাট নিবন্ধন সনদ</option>
-                        <option value="BANK_SOLVENCY">ব্যাংক সলভেন্সি সনদ</option>
-                        <option value="MEMO">স্মারক ও প্রবন্ধ সনদ</option>
+                        <option value="জাতীয় পরিচয়পত্র (NID)">জাতীয় পরিচয়পত্র (NID)</option>
+                        <option value="পাসপোর্ট সাইজ ছবি">পাসপোর্ট সাইজ ছবি</option>
+                        <option value="ট্রেড লাইসেন্স">ট্রেড লাইসেন্স</option>
+                        <option value="আয়কর সনদপত্র">আয়কর সনদপত্র</option>
+                        <option value="ভ্যাট নিবন্ধন সনদ">ভ্যাট নিবন্ধন সনদ</option>
+                        <option value="ব্যাংক সলভেন্সি সার্টিফিকেট">ব্যাংক সলভেন্সি সার্টিফিকেট </option>
+                        <option value="দরপত্র ক্রয়ের রশিদ">দরপত্র ক্রয়ের রশিদ </option>
+						<option value="ভ্যাট সংক্রান্ত কাগজ">ভ্যাট সংক্রান্ত কাগজ </option>
+						<option value="ইনকাম ট্যাক্স পরিশোধের সার্টিফিকেট">ইনকাম ট্যাক্স পরিশোধের সার্টিফিকেট  </option>
+						
+						
+						 
                     </select>
 
                     <!-- File Input -->
@@ -86,7 +91,7 @@ function validateForm() {
         });
     });
 
-    uploadBtn.disabled = !(allFilled && !duplicateFound && !fileTooLarge && selectedTypes.size === 7);
+    uploadBtn.disabled = !(allFilled && !duplicateFound && !fileTooLarge && selectedTypes.size === 9);
 }
 
 // Upload one by one with progress bar

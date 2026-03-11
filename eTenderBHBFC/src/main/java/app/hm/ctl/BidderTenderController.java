@@ -104,13 +104,19 @@ public class BidderTenderController {
          return layoutUtils.getLayout(auth);
     }
     
-    // Step 1: show form for bidder info + shop selection
     @GetMapping("/apply-tender-step1")
     public String showTenderStep1(Model model, Authentication auth) {
-        TenderBid tenderBid = new TenderBid();
 
-        // Initialize user to avoid Thymeleaf null error
         User user = userRepository.findByUsername(auth.getName()).orElseThrow();
+
+        // Check if already applied
+        if (tenderBidRepository.existsByUser(user)) {
+            model.addAttribute("errorMessage", "You have already applied for this tender.");
+            model.addAttribute("content", "tender/already-applied");
+            return layoutUtils.getLayout(auth);
+        }
+
+        TenderBid tenderBid = new TenderBid();
         tenderBid.setUser(user);
 
         model.addAttribute("tenderBid", tenderBid);
@@ -198,7 +204,7 @@ public class BidderTenderController {
 
         // Prepare 7 attachment placeholders
         List<Attachment> attachments = new ArrayList<>();
-        for(int i = 0; i < 7; i++) attachments.add(new Attachment());
+        for(int i = 0; i < 9; i++) attachments.add(new Attachment());
         bid.setAttachments(attachments);
 
         model.addAttribute("tenderBid", bid);

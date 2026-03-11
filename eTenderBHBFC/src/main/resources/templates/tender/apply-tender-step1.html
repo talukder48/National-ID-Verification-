@@ -26,7 +26,12 @@
             </div>
         </div>
     </div>
-
+	<div class="card-header bg-light d-flex justify-content-between align-items-center">
+	            <h4 class="mb-0">ধাপ ১ : দোকান নির্বাচন করুন </h4>
+	            <span class="badge bg-primary">সর্বোচ্চ ২টি </span>
+	        </div>
+			
+			<br>
     <!-- Shop Selection -->
     <div class="card mb-3">
         <div class="card-header bg-light py-2 d-flex justify-content-between align-items-center">
@@ -45,9 +50,8 @@
                             <th>দোকান</th>
                             <th>অবস্থান</th>
                             <th>মেইন ফ্লোর (বর্গফুট)</th>
-                            <th>মেজানিন  ফ্লোর (বর্গফুট)</th>
                             <th>মোট আয়তন (বর্গফুট)</th>
-                            <th style="width:220px">প্রস্তাবিত ভাড়া ও জামানত </th>
+                            <th style="width:450px">প্রস্তাবিত ভাড়া ও জামানত </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -57,7 +61,6 @@
                             </td>
                             <td>Shop [[${shop.number}]]</td>
                             <td>[[${shop.location}]]</td>
-                            <td>[[${shop.areaMainFloor}]]</td>
                             <td>[[${shop.areaMezzanineFloor}]]</td>
                             <td class="text-primary fw-bold">[[${shop.areaMainFloor + shop.areaMezzanineFloor}]]</td>
                             <td>

@@ -10,6 +10,7 @@ import app.hm.entity.User;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface TenderBidRepository extends JpaRepository<TenderBid, Long> {
 
@@ -20,6 +21,8 @@ public interface TenderBidRepository extends JpaRepository<TenderBid, Long> {
     
 
     List<TenderBid> findByStatus(String status);
+
+    boolean existsByUser(User user);
     
    
 }

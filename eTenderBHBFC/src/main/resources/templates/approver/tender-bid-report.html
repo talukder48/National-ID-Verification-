@@ -97,7 +97,7 @@ table.pl tbody tr:nth-child(even) {
 
 <!-- ================= HEADER ================= -->
 <div class="header">
-    <h2><strong>Bangladesh House Building Finance Corporation (BHBFC)</strong></h2>
+    <h2><strong>Bangladesh House Building Finance Corporation</strong></h2>
 
     <p>
         22, Purana Paltan.Head Office, Dhaka-1000
@@ -212,13 +212,17 @@ table.pl tbody tr:nth-child(even) {
 <div class="section-title">Submitted Documents</div>
 <table class="pl">
     <thead>
-        <tr><th>Name</th><th>Type</th><th>Path</th></tr>
+        <tr>
+            <th>সিরিয়াল </th>
+            <th>ডকুমেন্টস নাম </th>
+           
+        </tr>
     </thead>
     <tbody>
-        <tr th:each="att : ${bid.attachments}">
+        <tr th:each="att, stat : ${bid.attachments}">
+            <td th:text="${stat.index + 1}"></td>
             <td th:text="${att.name}"></td>
-            <td th:text="${att.type}"></td>
-            <td th:text="${att.filePath}"></td>
+           
         </tr>
     </tbody>
 </table>
